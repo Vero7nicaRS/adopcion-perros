@@ -1,0 +1,41 @@
+.dog-card {
+    width: 20rem;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+}
+
+.dog-card .card-img-top {
+    width: 100%;
+    height: 260px;
+
+    object-fit: cover;
+}
+
+.dog-btn {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour);
+
+    color: white;
+
+    font-weight: 600;
+}
+
+.dog-btn:hover {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour-hover);
+}
+
+
+.without-photo{
+    width: 100%;
+    height: 260px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #f3f3f3;
+    color: #777;
+}

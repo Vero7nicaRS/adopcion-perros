@@ -1,0 +1,23 @@
+/* Pie de página que aparecerá en cada pantalla indicando el diseñador de la aplicación web*/
+.footer-contenedor {
+    width: 100%;
+    min-height: 70px;
+    padding: 20px;
+
+    background-color: #ff9f9f;
+    color: white;
+
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .footer-contenido {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-enlaces {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

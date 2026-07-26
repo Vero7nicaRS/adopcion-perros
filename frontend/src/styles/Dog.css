@@ -1,0 +1,13 @@
+.dog-container {
+  min-height: calc(100vh - var(--altura-navbar));
+  margin-top: var(--altura-navbar);
+  padding: 30px;
+}
+
+
+.dog-list{
+      display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}

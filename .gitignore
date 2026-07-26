@@ -1,0 +1,30 @@
+################ Archivos que no se deben subir al repositorio ################
+
+# Archivos Python
+__pycache__/
+*/*.pyc
+
+# Entorno virtual 
+backend/.venv/
+backend/venv/
+
+# Fotografías y vídeos de los perros
+backend/media/
+
+# Base de datos
+backend/db.sqlite3
+
+# Variables de entorno
+backend/.env
+
+# Node.js
+frontend/node_modules/
+
+# Build de Vite
+frontend/dist/
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
