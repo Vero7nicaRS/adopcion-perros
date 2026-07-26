@@ -167,7 +167,7 @@ Los siguientes endpoints son orientativos y se actualizarán conforme avance el 
 
 Las solicitudes de adopción no pueden modificarse directamente mediante los métodos PUT o PATCH una vez enviadas. Los cambios de estado se realizan mediante los endpoints específicos de aceptación y rechazo
 
-Nota: Actualmente la autenticación y la autorización no están implementadas. Está previsto incorporar autenticación mediante JWT y control de permisos en una fase posterior del desarrollo.
+**Nota**: Actualmente la autenticación y la autorización no están implementadas. Está previsto incorporar autenticación mediante JWT y control de permisos en una fase posterior del desarrollo.
 
 
 
