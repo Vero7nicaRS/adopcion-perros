@@ -237,5 +237,7 @@ class AdoptionApplication (models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Solicitud de adopción de {self.user.username} para {self.dog.name} - Estado: {self.status}"
 #Serializers obtener información más sencilla del modelo.
 
