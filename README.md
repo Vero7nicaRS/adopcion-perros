@@ -170,6 +170,12 @@ Las solicitudes de adopción no pueden modificarse directamente mediante los mé
 Nota: Actualmente la autenticación y la autorización no están implementadas. Está previsto incorporar autenticación mediante JWT y control de permisos en una fase posterior del desarrollo.
 
 
+
+## 📹 Recursos multimedia
+
+Por motivos de tamaño, este repositorio no incluye la carpeta `backend/media/`, donde se almacenan las fotografías y los vídeos asociados a los perros.
+
+
 ## Estado del proyecto
 
 🚧 En desarrollo.
