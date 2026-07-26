@@ -6,9 +6,9 @@ import Home from './pages/Home.jsx'
 import NavBar from './components/NavBar.jsx'
 import Footer from './components/Footer.jsx'
 import Dog from './pages/Dog.jsx'
-function App() {
-  const [count, setCount] = useState(0)
+import DogDetails from './pages/DogDetails.jsx'
 
+function App() {
   return (
 
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> 
         <Route path="/dogs" element={<Dog />} /> 
+        <Route path="/dogs/:id" element={<DogDetails />} /> 
         <Route path='*' element={<p>404: Página no encontrada</p>} />
       </Routes>
 
