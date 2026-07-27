@@ -1,0 +1,42 @@
+.carousel-tam {
+    width: 600px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.carousel-item {
+    height: 400px;
+}
+
+.dog-carousel-image {
+    
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Arrows */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    display: none; /* Hiding original arrows*/
+}
+
+.bi-chevron-left,
+.bi-chevron-right {
+    color: var(--pink-colour);
+}
+
+/* Indicators */
+.carousel-indicators button {
+    background-color: var(--pink-colour);
+}
+
+.carousel-indicators .active {
+    background-color: var(--pink-colour-hover);
+}
+
+/* QUERY MEDIA */
+@media (max-width: 576px) {
+    .photo-item {
+        height: 280px;
+    }
+}
