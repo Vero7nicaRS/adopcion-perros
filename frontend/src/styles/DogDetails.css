@@ -50,3 +50,34 @@
 
     margin:25px 0;
 }
+
+.dog-temperament {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 5px;
+
+    background-color: var(--pink-colour);
+    border-radius: 10px;
+    color: white;
+}
+
+.dog-videos-container {
+}
+
+.dog-video-title{
+    margin: 10px 10px 10px 10px;
+    margin-bottom: 20px;
+}
+
+.dog-videos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+.dog-video {
+    border-radius: 5px;
+    width: 640px;
+    height: 360px;
+}

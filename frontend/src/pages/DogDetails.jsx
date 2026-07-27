@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 // Components
 import DogInfoDetail from "../components/DogInfoDetail"
+import DogPhotographs from "../components/DogPhotographs";
 
 import { API_BASE_URL } from '../api/url_api'
 
@@ -135,9 +136,9 @@ function DogDetails() {
                             <div className="col-md-8">
                                 <div className="card-body">
                                     <h1 className="card-title">{dogDetail.name}</h1>
-                                    <span className="badge text-bg-success">
+                                    <div className="badge text-bg-success">
                                         {dogDetail.adoption_status}
-                                    </span>
+                                    </div>
                                     <div className="dog-data">
 
                                         <div>
@@ -235,32 +236,68 @@ function DogDetails() {
                                         </div>
                                     </div>
                                     <hr></hr>
-                                        <h2>Sobre {dogDetail.name}</h2>
+                                        <h2>
+                                            <i className="bi bi-search-heart"> </i>   
+                                             Sobre {dogDetail.name}
+                                        </h2>
 
                                         <p className="card-text">
                                             {dogDetail.description}
                                         </p>
                                     <hr></hr>
-                                        <h2>Temperamento</h2>
-
-                                    
+                                        <h2>
+                                            <i className={`bi bi-suit-heart`}></i>{" "}
+                                            Temperamento
+                                        </h2>                                    
                                         <div className="dog-temperaments">
-                                            {dogDetail.temperaments?.map((temperament) => (
+                                            { dogDetail.temperament?.map((t) =>
                                                 <span
-                                                    key={temperament.id}
                                                     className="dog-temperament"
+                                                    key = {t.id}
                                                 >
-                                                    {temperament.name}
+                                                    {t.name}
                                                 </span>
-                                            ))}
+                                            )}
                                         </div>
-                                        
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-               
+
+
+                                                  
+            <div className="dog-videos-container">
+                <div className= "dog-video-title">
+                    <h2>
+                        <i className="bi bi-camera-reels"></i>{" "}
+                         Vídeo
+                    </h2> 
+                </div>
+                <div className="dog-videos"> 
+                    {dogDetail.videos?.map((video)=>                           
+                        <video 
+                            key={video.id}
+                            controls 
+                            className="dog-video"
+                            >
+                            <source
+                                src={`${video.file}`}
+                                type="video/mp4"
+                            />
+                                Tu navegador no puede reproducir este vídeo.
+                            </video>
+                    )}
+                </div>
+            </div>
+                
+            
+            <hr></hr>
+                <h2>
+                    <i className="bi bi-camera"></i>{" "}
+                        Fotografías
+                </h2>  
+                <DogPhotographs photographs={dogDetail.photographs} />
             </div>
         </>
     )
