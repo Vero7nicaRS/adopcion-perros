@@ -14,13 +14,13 @@ function Dog() {
   
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
-  // Estados de UseFEtch
+  // Estados de UseEffect
   const [dogList, setDogList] = useState(null); // Datos del listado de perros
 
   const [loading, setLoading] = useState(true); // Indica si los datos están cargados o no.
   const [error, setError] = useState(null); // Indica si hay un error o no.
  
-
+  const controller = new AbortController()
   useEffect(() => {
     console.log( "Lanzando fetch a la API...");
     setLoading(true);
@@ -55,6 +55,12 @@ function Dog() {
       }
     }
     fetchDog();
+    
+    // Limpiar la llamada fetch si el componente se desmonta antes de recibir la respuesta
+    return () => {
+      console.log("Limpiando fetch...");
+      controller.abort();
+    };
   }, []);
     /* Renderizados condicionales:
       - Loading.
