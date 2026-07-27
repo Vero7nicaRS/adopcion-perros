@@ -82,7 +82,6 @@ class Dog(models.Model):
     class AdoptionStatusChoices(models.TextChoices):
         AVAILABLE = "AVAILABLE", "Disponible"
         UNAVAILABLE = "UNAVAILABLE", "No disponible"
-        RESERVED = "RESERVED" , "Reservado"
         ADOPTED = "ADOPTED", "Adoptado"
 
     class CompatibleOption(models.TextChoices):
