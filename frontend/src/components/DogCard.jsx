@@ -12,11 +12,11 @@ function formatAge(age, unit) {
 }
 
 function DogCard({ dog }) {
-     const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
-    const photographUrl = dog.main_photograph
-                            ? `${API_BASE}${dog.main_photograph}`
-                            : null;
+  const photographUrl = dog.main_photograph
+                          ? `${API_BASE}${dog.main_photograph}`
+                          : null;
 
   return (
     <div className="card dog-card shadow">
@@ -36,7 +36,7 @@ function DogCard({ dog }) {
         <h5 className="card-title">{dog.name}</h5>
          <p className="card-text">
             Sexo:
-            {dog.sex ? " Macho" : " Hembra"}
+            {dog.sex === "MALE" ? " Macho" : dog.sex === "FEMALE" ? " Hembra" : " Desconocido"}
         </p>
         <p className="card-text">
             Raza:
