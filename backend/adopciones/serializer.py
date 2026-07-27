@@ -91,6 +91,29 @@ class LocationSerializer(serializers.ModelSerializer):
                 { "latitude" : "Debes indicar la latitude también." }
             )
         return data 
+
+    
+    
+# --------------------------
+#   PHOTOGRAPH SERIALIZER
+# --------------------------
+class PhotographSerializer(serializers.ModelSerializer):
+    class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
+        model = Photograph # Modelo
+        fields = ["id", "dog", "imagen", "title", "description", "created_at", "is_main"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
+        read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
+
+
+# --------------------------
+#   VIDEO SERIALIZER
+# --------------------------
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
+        model = Video # Modelo
+        fields = ["id", "dog", "file", "title", "description", "description", "created_at"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
+        read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
+
+
     
 # --------------------------
 #     DOG SERIALIZER
@@ -98,6 +121,27 @@ class LocationSerializer(serializers.ModelSerializer):
 class DogSerializer(serializers.ModelSerializer):
 
     main_photograph = serializers.SerializerMethodField()
+    temperament = TemperamentSerializer( # Use TemperamentSerializer to represent the id and name of the temperament.
+        many=True,
+        read_only=True
+    )
+    temperament_ids = serializers.PrimaryKeyRelatedField( # Use PrimaryKeyRelatedField to accept a list of temperament IDs.
+        source='temperament',  # This tells the serializer to use the 'temperament' field in the Dog model.
+        many=True, # Receive many PK
+        queryset=Temperament.objects.all(), # These PK must be in Temperament.objects.all()
+        write_only=True, # Write only 
+    )
+
+
+    photographs = PhotographSerializer(
+        many=True,
+        read_only=True
+    )
+
+    videos = VideoSerializer(
+        many=True,
+        read_only=True
+    )
 
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Dog # Modelo
@@ -107,7 +151,8 @@ class DogSerializer(serializers.ModelSerializer):
                   "has_special_needs","special_needs_description",
                   "is_sterilized", "is_vaccinated", "looking_for_home_since", 
                   "location", "adoption_status",
-                  "main_photograph"
+                  "main_photograph" , "temperament_ids",
+                  "videos", "photographs"
                   ] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
         read_only_fields = ["id"] # El usuario no puede modificarlas.
 
@@ -161,26 +206,6 @@ class DogSerializer(serializers.ModelSerializer):
         )
         return data
 
-    
-    
-# --------------------------
-#   PHOTOGRAPH SERIALIZER
-# --------------------------
-class PhotographSerializer(serializers.ModelSerializer):
-    class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
-        model = Photograph # Modelo
-        fields = ["id", "dog", "imagen", "title", "description", "created_at", "is_main"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
-        read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
-
-
-# --------------------------
-#   VIDEO SERIALIZER
-# --------------------------
-class VideoSerializer(serializers.ModelSerializer):
-    class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
-        model = Video # Modelo
-        fields = ["id", "dog", "file", "title", "description", "description", "created_at"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
-        read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
 
 # ------------------------------------
 #   ADOPTION APPLICATION SERIALIZER
