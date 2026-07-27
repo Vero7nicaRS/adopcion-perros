@@ -136,8 +136,28 @@ function DogDetails() {
                             <div className="col-md-8">
                                 <div className="card-body">
                                     <h1 className="card-title">{dogDetail.name}</h1>
-                                    <div className="badge text-bg-success">
-                                        {dogDetail.adoption_status}
+                                    <div
+                                        className={`dog-status ${
+                                            dogDetail.adoption_status === "AVAILABLE"
+                                                ? "dog-status-available"
+                                                : dogDetail.adoption_status === "ADOPTED"
+                                                ? "dog-status-adopted"
+                                                : "dog-status-unavailable"
+                                        }`}
+                                    >
+                                        <i className={
+                                                dogDetail.adoption_status === "AVAILABLE"
+                                                    ? "bi bi-heart"
+                                                    : dogDetail.adoption_status === "ADOPTED"
+                                                    ? "bi bi-house-heart"
+                                                    : "bi bi-pause-circle"
+                                            }
+                                        ></i>{" "}
+                                        {dogDetail.adoption_status === "AVAILABLE"
+                                            ? "Disponible"
+                                            : dogDetail.adoption_status === "ADOPTED"
+                                            ? "Adoptado"
+                                            : "No disponible"}
                                     </div>
                                     <div className="dog-data">
 
@@ -264,8 +284,6 @@ function DogDetails() {
                         </div>
                     </div>
                 </div>
-
-
                                                   
             <div className="dog-videos-container">
                 <div className= "dog-video-title">
@@ -290,14 +308,20 @@ function DogDetails() {
                     )}
                 </div>
             </div>
-                
             
             <hr></hr>
-                <h2>
-                    <i className="bi bi-camera"></i>{" "}
-                        Fotografías
-                </h2>  
+            <div className="dog-photos-container">
+                <div className= "dog-video-title">
+                    <h2>
+                        <i className="bi bi-camera"></i>{" "}
+                            Fotografías
+                    </h2>
+                </div>
+                  
                 <DogPhotographs photographs={dogDetail.photographs} />
+            </div>
+            <hr></hr>
+                
             </div>
         </>
     )

@@ -63,9 +63,10 @@
 }
 
 .dog-videos-container {
+    margin-top: 20px;
 }
 
-.dog-video-title{
+.dog-video-title, .dog-photos-title{
     margin: 10px 10px 10px 10px;
     margin-bottom: 20px;
 }
@@ -80,4 +81,36 @@
     border-radius: 5px;
     width: 640px;
     height: 360px;
+}
+
+.dog-photos-container {
+    margin-top: 20px;
+}
+
+/* Status */
+.dog-status {
+    display: inline-block;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.4rem 1rem;
+
+    border-radius: 999px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.dog-status-available {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.dog-status-adopted {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.dog-status-unavailable {
+    background-color: #e2e3e5;
+    color: #41464b;
 }
