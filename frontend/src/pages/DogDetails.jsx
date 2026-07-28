@@ -254,6 +254,14 @@ function DogDetails() {
                                                     value = {formatBoolean(dogDetail.is_vaccinated)}
                                             ></DogInfoDetail>
                                         </div>
+
+                                        <div>
+                                            <DogInfoDetail
+                                                    title= "Ubicación"
+                                                    icon = "bi bi-geo-alt"
+                                                    value = {dogDetail.location?.name}
+                                            ></DogInfoDetail>
+                                        </div>
                                     </div>
                                     <hr></hr>
                                         <h2>
