@@ -143,6 +143,10 @@ class DogSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    location = LocationSerializer(
+        read_only=True
+    )
+
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Dog # Modelo
         fields = ["id","name", "estimated_age", "estimated_age_unit", 
