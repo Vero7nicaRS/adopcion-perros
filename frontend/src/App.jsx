@@ -7,6 +7,7 @@ import NavBar from './components/NavBar.jsx'
 import Footer from './components/Footer.jsx'
 import Dog from './pages/Dog.jsx'
 import DogDetails from './pages/DogDetails.jsx'
+import AdoptionApplicationForm from './pages/AdoptionApplicationForm.jsx'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Home />} /> 
         <Route path="/dogs" element={<Dog />} /> 
         <Route path="/dogs/:id" element={<DogDetails />} /> 
+        <Route path="/dogs/:id/adoption" element={<AdoptionApplicationForm />} />
         <Route path='*' element={<p>404: Página no encontrada</p>} />
       </Routes>
 
