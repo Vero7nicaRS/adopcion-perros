@@ -10,6 +10,8 @@ import DogPhotographs from "../components/DogPhotographs";
 
 import { API_BASE_URL } from '../api/url_api'
 
+// Link
+import { Link } from "react-router-dom";
 
 function formatBoolean(value) {
     return value ? (
@@ -136,31 +138,47 @@ function DogDetails() {
                             <div className="col-md-8">
                                 <div className="card-body">
                                     <h1 className="card-title">{dogDetail.name}</h1>
-                                    <div
-                                        className={`dog-status ${
+                                    <div className= "dog-card-header-container"> 
+                                        <div className={`dog-status ${
                                             dogDetail.adoption_status === "AVAILABLE"
                                                 ? "dog-status-available"
                                                 : dogDetail.adoption_status === "ADOPTED"
                                                 ? "dog-status-adopted"
                                                 : "dog-status-unavailable"
-                                        }`}
-                                    >
-                                        <i className={
-                                                dogDetail.adoption_status === "AVAILABLE"
-                                                    ? "bi bi-heart"
-                                                    : dogDetail.adoption_status === "ADOPTED"
-                                                    ? "bi bi-house-heart"
-                                                    : "bi bi-pause-circle"
-                                            }
-                                        ></i>{" "}
-                                        {dogDetail.adoption_status === "AVAILABLE"
-                                            ? "Disponible"
-                                            : dogDetail.adoption_status === "ADOPTED"
-                                            ? "Adoptado"
-                                            : "No disponible"}
-                                    </div>
-                                    <div className="dog-data">
+                                                }`}
+                                        >
+                                            <i className={
+                                                    dogDetail.adoption_status === "AVAILABLE"
+                                                        ? "bi bi-heart"
+                                                        : dogDetail.adoption_status === "ADOPTED"
+                                                        ? "bi bi-house-heart"
+                                                        : "bi bi-pause-circle"
+                                                }
+                                            ></i>{" "}
+                                            {dogDetail.adoption_status === "AVAILABLE"
+                                                ? "Disponible"
+                                                : dogDetail.adoption_status === "ADOPTED"
+                                                ? "Adoptado"
+                                                : "No disponible"}
+                                        </div>
+                                        <div >
+                                            {dogDetail.adoption_status === "AVAILABLE" && (
+                                                <Link 
+                                                    to={`/dogs/${dogDetail.id}/adoption`}
+                                                    className= "dog-adoption-button"
+                                                >
+                                                    <i class="bi bi-heart">
+                                                        {" " } Solicitar adopción
+                                                        </i>     
+                                                </Link>
+                                            )}
 
+                                        </div>
+
+
+                                    </div>
+                                    
+                                    <div className="dog-data">
                                         <div>
                                             <DogInfoDetail
                                                     title= "Sexo"
@@ -293,42 +311,63 @@ function DogDetails() {
                     </div>
                 </div>
                                                   
-            <div className="dog-videos-container">
-                <div className= "dog-video-title">
-                    <h2>
-                        <i className="bi bi-camera-reels"></i>{" "}
-                         Vídeo
-                    </h2> 
+                <div className="dog-videos-container">
+                    <div className= "dog-video-title">
+                        <h2>
+                            <i className="bi bi-camera-reels"></i>{" "}
+                            Vídeo
+                        </h2> 
+                    </div>
+                    <div className="dog-videos"> 
+                        {dogDetail.videos?.map((video)=>                           
+                            <video 
+                                key={video.id}
+                                controls 
+                                className="dog-video"
+                                >
+                                <source
+                                    src={`${video.file}`}
+                                    type="video/mp4"
+                                />
+                                    Tu navegador no puede reproducir este vídeo.
+                                </video>
+                        )}
+                    </div>
                 </div>
-                <div className="dog-videos"> 
-                    {dogDetail.videos?.map((video)=>                           
-                        <video 
-                            key={video.id}
-                            controls 
-                            className="dog-video"
+                
+                <hr></hr>
+                <div className="dog-photos-container">
+                    <div className= "dog-video-title">
+                        <h2>
+                            <i className="bi bi-camera"></i>{" "}
+                                Fotografías
+                        </h2>
+                    </div>
+                    
+                    <DogPhotographs photographs={dogDetail.photographs} />
+                </div>
+                <hr></hr>
+                <div class= "dog-adoption-down-container">
+                    <h2>¿Te gustaría darle un hogar a {dogDetail.name}?</h2>
+                        <div className= "text-dog-adoption-down">
+                            Completa el formulario de adopción y la asociación se pondrá en contacto contigo
+                            en la mayor brevedad posible.
+                        </div>
+
+                    <div className= "dog-adoption-down-button">
+                        {dogDetail.adoption_status === "AVAILABLE" && (
+                            <Link 
+                                to={`/dogs/${dogDetail.id}/adoption`}
+                                className= "dog-adoption-button"
                             >
-                            <source
-                                src={`${video.file}`}
-                                type="video/mp4"
-                            />
-                                Tu navegador no puede reproducir este vídeo.
-                            </video>
-                    )}
+                                <i class="bi bi-heart">
+                                    {" " } Solicitar adopción
+                                    </i>     
+                            </Link>
+                        )}
+                    </div>
+                    
                 </div>
-            </div>
-            
-            <hr></hr>
-            <div className="dog-photos-container">
-                <div className= "dog-video-title">
-                    <h2>
-                        <i className="bi bi-camera"></i>{" "}
-                            Fotografías
-                    </h2>
-                </div>
-                  
-                <DogPhotographs photographs={dogDetail.photographs} />
-            </div>
-            <hr></hr>
                 
             </div>
         </>

@@ -18,9 +18,7 @@
 .dog-btn {
     background-color: var(--pink-colour);
     border-color: var(--pink-colour);
-
     color: white;
-
     font-weight: 600;
 }
 
@@ -113,4 +111,38 @@
 .dog-status-unavailable {
     background-color: #e2e3e5;
     color: #41464b;
+}
+
+/* Header */
+.dog-card-header-container{
+    display: flex;
+    gap: 30%;
+    justify-content: space-between;
+}
+
+.dog-adoption-button{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 20px;
+    border-radius: 10px;
+
+    background-color: var(--pink-colour);
+    color: white;
+    font-weight: 600;
+}
+
+.dog-adoption-button:hover{
+    background-color: var(--pink-colour-hover);
+    color: white;
+}
+
+/* Adoption down */
+.dog-adoption-down-container{
+    margin: 10px 10px 10px 10px;
+    margin-bottom: 20px;
+}
+.dog-adoption-down-button{
+    margin-top: 1%;
 }
