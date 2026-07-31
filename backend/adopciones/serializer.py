@@ -226,21 +226,29 @@ class AdoptionApplicationSerializer(serializers.ModelSerializer):
 
         # Comprobar que el perro no esté adoptado.
         # Si está adoptado, lanzar un mensaje de error.
-        if dog.adoption_status == Dog.AdoptionStatusChoices.ADOPTED:
+        if dog and dog.adoption_status == Dog.AdoptionStatusChoices.ADOPTED:
             raise serializers.ValidationError( {
                 "dog": "No se puede solicitar la adopción de un perro que ya ha sido adoptado."
+            })
+
+        # Comprobar que el perro esté disponible para adopción.
+        # Si no está disponible, lanzar un mensaje de error.
+        if dog and dog.adoption_status != Dog.AdoptionStatusChoices.AVAILABLE:
+            raise serializers.ValidationError({
+                "dog": "Este perro no está disponible para adopción."
             })
 
         # Si un mismo usuario realiza varias veces una solicitud en el mismo perro, 
         # lanza un mensaje de error.
         # Un usuario puede hacer UNA única solicitud en UN perro.
-        application_exists = AdoptionApplication.objects.filter(
-            dog = dog, 
-            user = user
-        ).exists()
+        if dog and user:
+            application_exists = AdoptionApplication.objects.filter(
+                dog = dog, 
+                user = user
+            ).exists()
         
-        if application_exists: 
-            raise serializers.ValidationError( {
-                "dog": "Tienes ya una solicitud de adopción para este perro."
-            })
+            if application_exists: 
+                raise serializers.ValidationError( {
+                    "dog": "Tienes ya una solicitud de adopción para este perro."
+                })
         return data 
