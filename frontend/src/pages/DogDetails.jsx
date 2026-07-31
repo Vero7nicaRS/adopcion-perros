@@ -62,14 +62,16 @@ function DogDetails() {
  
 
   useEffect(() => {
-    console.log( "Lanzando fetch a la API...");
-    setLoading(true);
-    setError(null);
 
     const controller = new AbortController()
 
     // Obtener los datos de la API: detalles del perro.
     const fetchDog = async () => {
+
+        console.log( "Lanzando fetch a la API...");
+        setLoading(true);
+        setError(null);
+
         try {
             // 1) Se obtiene los datos del perro "id"
             const dogResponse = await fetch(`${API_BASE}/adopta_tu_canino/perros/${id}/`);
@@ -166,7 +168,7 @@ function DogDetails() {
                                                 <Link 
                                                     to={`/dogs/${dogDetail.id}/adoption`}
                                                     className= "dog-adoption-button"
-                                                >
+                                               >
                                                     <i class="bi bi-heart">
                                                         {" " } Solicitar adopción
                                                         </i>     
