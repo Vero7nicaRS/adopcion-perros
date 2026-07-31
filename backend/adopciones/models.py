@@ -236,7 +236,19 @@ class AdoptionApplication (models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Constraints to ensure that a user can only submit one adoption application per dog.
+    # Avoid duplicate applications for the same dog by the same user.
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "dog"],
+                name="unique_user_dog_application"
+            )
+        ]
     def __str__(self):
-        return f"Solicitud de adopción de {self.user.username} para {self.dog.name} - Estado: {self.status}"
+        return ( 
+            f"Solicitud de adopción de {self.user.username} " 
+            f"para {self.dog.name} - Estado: {self.status}"
+        )
 #Serializers obtener información más sencilla del modelo.
 
