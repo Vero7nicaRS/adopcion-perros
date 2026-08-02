@@ -4,6 +4,10 @@ import "../styles/DogCard.css";
 
 
 function formatAge(age, unit) {
+    if (age === null || age === undefined) {
+        return "Desconocida";
+    }
+
     if (unit === "MONTHS") {
         return `${age} ${age === 1 ? "mes" : "meses"}`;
     }
