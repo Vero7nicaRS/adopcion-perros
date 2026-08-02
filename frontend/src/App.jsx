@@ -14,7 +14,7 @@ import AuthProvider from "./context/authentication/AuthProvider";
 import ProtectedRoute from './context/authentication/ProtectedRoute.jsx';
 import AdminRoute from './context/authentication/AdminRoute.jsx';
 import AdminPanel from './pages/AdminPanel.jsx';
-import UserPanel from './pages/UserPanel.jsx';
+import Applications from './pages/AdoptionApplicationsPanel.jsx';
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
           <Route path= "/dog-panel/"
                 element = {
                   <ProtectedRoute>
-                    <UserPanel/>
+                    <Applications/>
                   </ProtectedRoute>
                 }
           />
