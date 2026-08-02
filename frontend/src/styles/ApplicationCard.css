@@ -1,0 +1,71 @@
+.application-card {
+    width: 20rem;
+    overflow: hidden;
+    border-radius: 15px;
+    
+}
+
+.application-card .card-img-top {
+    width: 100%;
+    height: 260px;
+
+    object-fit: cover;
+}
+
+.dog-btn {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour);
+
+    color: white;
+
+    font-weight: 600;
+}
+
+.dog-btn:hover {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour-hover);
+}
+
+
+.without-photo{
+    width: 100%;
+    height: 260px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #f3f3f3;
+    color: #777;
+}
+
+.application-card-title {
+    font-size: 1.3rem;
+}
+
+.application-status {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.status-accepted {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.application-comment {
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+}

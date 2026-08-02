@@ -28,12 +28,20 @@ from django.utils import timezone
 #     USER SERIALIZER
 # --------------------------
 class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(
+            write_only=True,
+            required=True
+        )
     class Meta:  # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = User # Modelo
         fields = ['id', 'username', 'first_name', 'last_name', 'email',
-                'birth_date','phone', 'date_joined', 'updated_at',] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
+                'birth_date','phone', 'date_joined', 'updated_at',
+                'password'] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
         read_only_fields = ['id', 'date_joined', 'updated_at'] # El usuario no puede modificarlas.
 
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
 # --------------------------
 #   TEMPERAMENT SERIALIZER
 # --------------------------
@@ -211,18 +219,52 @@ class DogSerializer(serializers.ModelSerializer):
         return data
 
 
+# -----------------------------------------
+#    DOG SUMMARY SERIALIZER
+# -----------------------------------------
+class DogSummarySerializer(serializers.ModelSerializer):
+
+    main_photograph = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Dog
+        fields = [
+            "id",
+            "name",
+            "sex",
+            "breed",
+            "estimated_age",
+            "estimated_age_unit",
+            "main_photograph"
+        ]
+
+    def get_main_photograph(self, dog):
+        photograph = dog.photographs.filter(is_main=True).first()
+
+        if photograph:
+            return photograph.imagen.url
+
+        return None
+
 # ------------------------------------
 #   ADOPTION APPLICATION SERIALIZER
 # ------------------------------------
 class AdoptionApplicationSerializer(serializers.ModelSerializer):
+
+    dog_detail = DogSummarySerializer(
+            source = "dog",
+            read_only= True
+        )
+    
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = AdoptionApplication # Modelo
-        fields = ["id", "user", "dog", "status", "comment", "created_at"]
-        read_only_fields = ["id" , "status", "created_at"] # El usuario no puede modificarlas.
+        fields = ["id", "user", "dog", "status", "comment", "created_at", "dog_detail"]
+        read_only_fields = ["id" , "user", "status", "created_at", "dog_detail"] # El usuario no puede modificarlas.
 
+    
     def validate(self, data):
         dog = data.get("dog")
-        user = data.get("user")
+        user = self.context["request"].user
 
         # Comprobar que el perro no esté adoptado.
         # Si está adoptado, lanzar un mensaje de error.
@@ -252,3 +294,5 @@ class AdoptionApplicationSerializer(serializers.ModelSerializer):
                     "dog": "Tienes ya una solicitud de adopción para este perro."
                 })
         return data 
+
+

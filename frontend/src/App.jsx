@@ -8,26 +8,56 @@ import Footer from './components/Footer.jsx'
 import Dog from './pages/Dog.jsx'
 import DogDetails from './pages/DogDetails.jsx'
 import AdoptionApplicationForm from './pages/AdoptionApplicationForm.jsx'
+import Login from "./pages/Login.jsx"
+import Register from './pages/Register.jsx';
+import AuthProvider from "./context/authentication/AuthProvider";
+import ProtectedRoute from './context/authentication/ProtectedRoute.jsx';
+import AdminRoute from './context/authentication/AdminRoute.jsx';
+import AdminPanel from './pages/AdminPanel.jsx';
+import UserPanel from './pages/UserPanel.jsx';
 
 function App() {
   return (
 
     <BrowserRouter>
-      {/* NAVBAR */}
-      <NavBar> </NavBar>
+      <AuthProvider>
+        {/* NAVBAR */}
+        <NavBar> </NavBar>
 
-      {/* RUTAS */}
-      <Routes>
-        <Route path="/" element={<Home />} /> 
-        <Route path="/dogs" element={<Dog />} /> 
-        <Route path="/dogs/:id" element={<DogDetails />} /> 
-        <Route path="/dogs/:id/adoption" element={<AdoptionApplicationForm />} />
-        <Route path='*' element={<p>404: Página no encontrada</p>} />
-      </Routes>
+        {/* RUTAS */}
+        <Routes>
+          <Route path="/" element={<Home />} /> 
+          <Route path="/dogs" element={<Dog />} /> 
+          <Route path="/dogs/:id" element={<DogDetails />} /> 
+          <Route path="/dogs/:id/adoption" 
+                element={
+                  <ProtectedRoute>
+                    <AdoptionApplicationForm />
+                  </ProtectedRoute>
+                } />
+          <Route path= "/dog-panel/"
+                element = {
+                  <ProtectedRoute>
+                    <UserPanel/>
+                  </ProtectedRoute>
+                }
+          />
 
-      {/* FOOTER */}
-      <Footer></Footer>
-    
+          <Route path="/admin" 
+                element ={
+                  <AdminRoute>
+                    <AdminPanel />
+                  </AdminRoute>
+                } />
+          
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register /> } />
+          <Route path='*' element={<p>404: Página no encontrada</p>} />
+        </Routes>
+
+        {/* FOOTER */}
+        <Footer></Footer>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

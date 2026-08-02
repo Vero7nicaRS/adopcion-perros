@@ -6,15 +6,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // Components
-
 import DogSummary from "../components/DogSummary";
 import DogInfoDetail from "../components/DogInfoDetail"
 
+// Context
+import useAuth from "../context/authentication/useAuth";
 
 function AdoptionApplicationForm() {
 
     // Id de la URL
     const { id } = useParams();
+
+    const { accessToken } = useAuth();
 
     //     
     const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
@@ -92,10 +95,11 @@ function AdoptionApplicationForm() {
         try {
           const response = await fetch(`${API_BASE}/adopta_tu_canino/solicitud-adopcion/`, {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json", 
+                          "Authorization": `Bearer ${accessToken}` 
+                        },
               // Aquí se envía el ID del perro y el comentario del usuario
               body: JSON.stringify({
-                  user: 2,
                   dog: Number(id),
                   comment: comment.trim()
               })
@@ -152,10 +156,13 @@ function AdoptionApplicationForm() {
 
                     {/* Textarea*/}
                     <div className="dog-application-form-comment">
-                      <label className="dog-application-form-label">
+                      <label 
+                        htmlFor="comment"
+                        className="dog-application-form-label">
                           Comentarios
                       </label>
                       <textarea
+                          id = "comment"
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                           placeholder="Escribe el contenido..."

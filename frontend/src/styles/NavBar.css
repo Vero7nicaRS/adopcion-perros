@@ -68,3 +68,12 @@
     margin-top: 10px;
   }
 }
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: white;
+    font-weight: 600;
+}

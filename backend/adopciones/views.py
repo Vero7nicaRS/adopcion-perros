@@ -1,3 +1,4 @@
+from django.db.migrations import serializer
 from django.shortcuts import render
 
 # Create your views here.
@@ -6,6 +7,11 @@ from .models import  User, Temperament, Location, Dog, Photograph, Video, Adopti
 from .serializer import UserSerializer, TemperamentSerializer, LocationSerializer, DogSerializer, PhotographSerializer, VideoSerializer, AdoptionApplicationSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser
+
+from rest_framework.views import APIView
+
 
 # --------------------------
 #     USER VIEWSET
@@ -14,7 +20,30 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('username') # Obtener la información
     serializer_class = UserSerializer 
     lookup_field = 'pk'
+    def get_permissions(self):
+        if self.action == "create": # Create --> Everyone 
+            permission_classes = [AllowAny]
+        else: # Another action --> Only Admin
+            permission_classes = [IsAdminUser]
 
+        return [
+            permission()
+            for permission in permission_classes
+        ]
+
+
+# --------------------------
+#     CURRENT USER VIEW
+# --------------------------
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        return Response({
+            "id": request.user.id,
+            "username": request.user.username,
+            "email": request.user.email,
+            "is_staff": request.user.is_staff
+        })
 
 # --------------------------
 #     TEMPERAMENT VIEWSET
@@ -65,10 +94,23 @@ class VideoViewSet(viewsets.ModelViewSet):
 # ADOPTION APPLICATION VIEWSET
 # --------------------------------
 class AdoptionApplicationViewSet(viewsets.ModelViewSet):
-    queryset = AdoptionApplication.objects.all().order_by('status') # Obtener la información
+#    queryset = AdoptionApplication.objects.all().order_by('status') # Obtener la información
     serializer_class = AdoptionApplicationSerializer
     lookup_field = 'pk'
 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user 
+        if user.is_staff:
+            return AdoptionApplication.objects.all().order_by('status') # Obtener la información
+        else:
+            return AdoptionApplication.objects.filter(
+                user=user
+            ).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 # detail=True  → actúa sobre un objeto → incluye /7/
 # detail=False → actúa sobre la colección → no incluye /7/
 
@@ -79,7 +121,7 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
 # 3. Search all adoptation application related this dog. (Buscas todas las solicitudes de ese perro).
 # 4. Reject all adoptation application except that (Excluyes la que acabas de aceptar).
 # Cambias el estado del resto a REJECTED.
-
+    
     @action(detail=True, methods=['patch'])
     def accept_status(self, request, pk=None):
         adoption_application = self.get_object() # Obtiene la información de la base de datos mediante la URL, que contiene la "PK"

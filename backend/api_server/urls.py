@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
+
 # Para las imágenes y vídeos
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,8 +30,23 @@ from django.conf.urls.static import static
 # Cuando una URL empiece por /adopta_tu_canino/, vaya al archivo "urls.py" y 
 # utilice su "urlpatterns"
 
+# Para JWT
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path(
+        "api/token/",
+        TokenObtainPairView.as_view(),
+        name="token_obtain_pair"
+    ),
+
+    path(
+        "api/token/refresh/",
+        TokenRefreshView.as_view(),
+        name="token_refresh"
+    ),
     path('adopta_tu_canino/', include('adopciones.urls')) 
 ]
 if settings.DEBUG:

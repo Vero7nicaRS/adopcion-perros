@@ -3,6 +3,10 @@ import "../styles/DogDetails.css";
 // Modulos
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
+
+// Context
+import useAuth from "../context/authentication/useAuth";
 
 // Components
 import DogInfoDetail from "../components/DogInfoDetail"
@@ -10,8 +14,8 @@ import DogPhotographs from "../components/DogPhotographs";
 
 import { API_BASE_URL } from '../api/url_api'
 
-// Link
-import { Link } from "react-router-dom";
+// Link, Navigate
+import { Link , useNavigate } from "react-router-dom";
 
 function formatBoolean(value) {
     return value ? (
@@ -60,6 +64,20 @@ function DogDetails() {
   const [loading, setLoading] = useState(true); // Indica si los datos están cargados o no.
   const [error, setError] = useState(null); // Indica si hay un error o no.
  
+  const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const { isAuthenticated, logout } = useAuth();
+
+  // handler
+  const handleAdoptionClick = () => {
+    if (isAuthenticated) {
+        navigate(`/dogs/${dogDetail.id}/adoption`);
+        return;
+    }
+
+    setShowLoginModal(true);
+    };
 
   useEffect(() => {
 
@@ -165,14 +183,14 @@ function DogDetails() {
                                         </div>
                                         <div >
                                             {dogDetail.adoption_status === "AVAILABLE" && (
-                                                <Link 
-                                                    to={`/dogs/${dogDetail.id}/adoption`}
-                                                    className= "dog-adoption-button"
-                                               >
-                                                    <i class="bi bi-heart">
-                                                        {" " } Solicitar adopción
-                                                        </i>     
-                                                </Link>
+                                                <button
+                                                    type="button"
+                                                    className="dog-adoption-button"
+                                                    onClick={handleAdoptionClick}
+                                                >
+                                                    <i className="bi bi-heart"></i>
+                                                    Solicitar adopción
+                                                </button>
                                             )}
 
                                         </div>
@@ -349,7 +367,7 @@ function DogDetails() {
                     <DogPhotographs photographs={dogDetail.photographs} />
                 </div>
                 <hr></hr>
-                <div class= "dog-adoption-down-container">
+                <div className= "dog-adoption-down-container">
                     <h2>¿Te gustaría darle un hogar a {dogDetail.name}?</h2>
                         <div className= "text-dog-adoption-down">
                             Completa el formulario de adopción y la asociación se pondrá en contacto contigo
@@ -358,20 +376,54 @@ function DogDetails() {
 
                     <div className= "dog-adoption-down-button">
                         {dogDetail.adoption_status === "AVAILABLE" && (
-                            <Link 
-                                to={`/dogs/${dogDetail.id}/adoption`}
-                                className= "dog-adoption-button"
+                            <button
+                                type="button"
+                                className="dog-adoption-button"
+                                onClick={handleAdoptionClick}
                             >
-                                <i class="bi bi-heart">
-                                    {" " } Solicitar adopción
-                                    </i>     
-                            </Link>
+                                <i className="bi bi-heart"></i>
+                                Solicitar adopción
+                            </button>
                         )}
                     </div>
                     
                 </div>
                 
             </div>
+
+            <Modal
+                show={showLoginModal}
+                onHide={() => setShowLoginModal(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Inicio de sesión necesario</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    Para enviar una solicitud de adopción debes iniciar sesión
+                    con tu cuenta.
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowLoginModal(false)}
+                    >
+                        Cancelar
+                    </Button>
+
+                    <Button
+                        className="dog-modal-login-button"
+                        onClick={() => {
+                            setShowLoginModal(false);
+                            navigate("/login");
+                        }}
+                    >
+                        Iniciar sesión
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }export default DogDetails;

@@ -127,6 +127,7 @@
 
     padding: 12px 20px;
     border-radius: 10px;
+    border: none; 
 
     background-color: var(--pink-colour);
     color: white;
@@ -145,4 +146,15 @@
 }
 .dog-adoption-down-button{
     margin-top: 1%;
+}
+
+/* Modal */
+.dog-modal-login-button {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour);
+}
+
+.dog-modal-login-button:hover {
+    background-color: var(--pink-colour-hover);
+    border-color: var(--pink-colour-hover);
 }

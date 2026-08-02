@@ -1,7 +1,6 @@
-from django.urls import path 
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, LocationViewSet, TemperamentViewSet, DogViewSet, PhotographViewSet, VideoViewSet, AdoptionApplicationViewSet
-
+from .views import UserViewSet, LocationViewSet, TemperamentViewSet, DogViewSet, PhotographViewSet, VideoViewSet, AdoptionApplicationViewSet, CurrentUserView
 
 router = DefaultRouter()
 
@@ -14,4 +13,15 @@ router.register(r'perros', DogViewSet, basename='dog')
 router.register(r'fotografias', PhotographViewSet, basename='photograph')
 router.register(r'videos', VideoViewSet, basename='video')
 router.register(r'solicitud-adopcion', AdoptionApplicationViewSet, basename='adoptation-application')
-urlpatterns = router.urls
+
+urlpatterns = [
+
+     path(
+            "usuarios/me/",
+            CurrentUserView.as_view(),
+            name="current-user"
+        ),
+
+    path("", include(router.urls)) # urlpatterns = router.urls
+   
+]
