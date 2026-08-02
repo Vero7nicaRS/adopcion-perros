@@ -24,6 +24,22 @@ from django.utils import timezone
 # validate_name ... Comprueba el campo name.
 # --------------------------------------------------------------------------------------------------------------------------
 
+
+# -----------------------------
+#     USER SUMMARY SERIALIZER
+# -----------------------------
+class UserSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+        ]
+
 # --------------------------
 #     USER SERIALIZER
 # --------------------------
@@ -255,11 +271,15 @@ class AdoptionApplicationSerializer(serializers.ModelSerializer):
             source = "dog",
             read_only= True
         )
-    
+    user_detail = UserSummarySerializer(
+        source="user",
+        read_only=True
+    )
+        
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = AdoptionApplication # Modelo
-        fields = ["id", "user", "dog", "status", "comment", "created_at", "dog_detail"]
-        read_only_fields = ["id" , "user", "status", "created_at", "dog_detail"] # El usuario no puede modificarlas.
+        fields = ["id", "user", "dog", "status", "comment", "created_at", "dog_detail", "user_detail"]
+        read_only_fields = ["id" , "user", "status", "created_at", "dog_detail", "user_detail"] # El usuario no puede modificarlas.
 
     
     def validate(self, data):
