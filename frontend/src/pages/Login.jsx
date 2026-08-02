@@ -196,7 +196,14 @@ function Login() {
                       disabled={submitting}
                       className = "login-enter-button"   
                       >
-                      {submitting ? "⏳ Enviando..." : "Entrar"}
+                       {submitting ? (
+                            <>
+                                <i className="bi bi-hourglass-split"></i>
+                                Enviando...
+                            </>
+                        ) : (
+                            "Entrar"
+                        )}
                     </button>
                   </form>
                 </div>
