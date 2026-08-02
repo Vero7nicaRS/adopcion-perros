@@ -69,3 +69,49 @@
     margin-top: 0.4rem;
     margin-bottom: 0;
 }
+
+/* BUTTON: ACCEPT - REJECT */
+.application-view-button {
+    margin-top: 0.75rem;
+}
+
+.application-admin-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 0.75rem;
+}
+
+.dog-btn-accept,
+.dog-btn-reject {
+    flex: 1;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.dog-btn-accept {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.dog-btn-accept:hover {
+    background-color: #badbcc;
+    color: #0f5132;
+}
+
+.dog-btn-reject {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.dog-btn-reject:hover {
+    background-color: #f5c2c7;
+    color: #842029;
+}

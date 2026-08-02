@@ -57,7 +57,7 @@ function getStatusClass(status) {
     }
 }
 
-function ApplicationCard({ application }) {
+function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
     const dog = application.dog_detail;
 
     if (!dog) {
@@ -128,6 +128,26 @@ function ApplicationCard({ application }) {
                     >
                     Ver ficha
                 </Link>
+
+                {isAdmin && application.status === "PENDING" && (
+                    <div className="application-admin-actions">
+                        <button
+                            onClick={() => onAccept(application.id)}
+                            type="button"
+                            className="btn dog-btn-accept"
+                        >
+                            Aceptar
+                        </button>
+
+                        <button
+                            onClick={() => onReject(application.id)}
+                            type="button"
+                            className="btn dog-btn-reject"
+                        >
+                            Rechazar
+                        </button>
+                    </div>
+                )}
             </div>
  
         </div>
