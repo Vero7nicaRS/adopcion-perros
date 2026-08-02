@@ -1,5 +1,7 @@
 .login-container{
-    padding-top: 130px;
+    min-height: calc(100vh - var(--altura-navbar));
+    margin-top: var(--altura-navbar);
+    padding: 30px;
 }
 
 /* HEADER */
