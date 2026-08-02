@@ -122,7 +122,7 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
 # 4. Reject all adoptation application except that (Excluyes la que acabas de aceptar).
 # Cambias el estado del resto a REJECTED.
     
-    @action(detail=True, methods=['patch'])
+    @action(detail=True, methods=['patch'], permission_classes=[IsAdminUser])
     def accept_status(self, request, pk=None):
         adoption_application = self.get_object() # Obtiene la información de la base de datos mediante la URL, que contiene la "PK"
 
@@ -158,7 +158,7 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
             status = status.HTTP_200_OK,
         )
 
-    @action(detail=True, methods=['patch'])
+    @action(detail=True, methods=['patch'], permission_classes=[IsAdminUser])
     def reject_status(self, request, pk=None):
         adoption_application = self.get_object() # Obtiene la información de la base de datos mediante la URL, que contiene la "PK"
 
