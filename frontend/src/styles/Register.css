@@ -1,0 +1,158 @@
+.register-container{
+    padding-top: 130px;
+}
+
+/* HEADER */
+.register-header{
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* TEXT - HEADER*/
+.register-text{
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* FORM */
+.register-form{
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 2%;
+}
+/* USERNAME TEXT */
+.register-username-text{
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* PASSWORD CONTAINER */
+.password-container {
+    margin-top: 1rem;
+}
+
+.password-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.register-password-text {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.register-show-button {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+
+    background-color: var(--pink-colour);
+    color: white;
+
+    cursor: pointer;
+}
+
+.register-show-button:hover {
+    background-color: var(--pink-colour-hover);
+}
+
+/* BUTTON */
+.register-enter-button{
+    width: 100%;
+    padding: 2%;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--pink-colour);
+    color: white;
+    font-weight: 600;
+}
+
+.register-enter-button:hover{
+    background-color: var(--pink-colour-hover);
+    color: white;
+}
+
+
+/* LABEL */
+.register-username-label, .register-password-label, 
+.register-email-label, .register-birthday-label
+    {
+        margin-top: 1rem;
+     display: block;
+     margin-bottom: 4px;
+     font-weight: bold;
+}
+
+
+/* CREATE ACCOUNT */
+.create-account{
+    padding: 1%;
+}
+
+.register-register-button{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 20px;
+    border-radius: 10px;
+
+    background-color: var(--pink-colour);
+    color: white;
+    font-weight: 600;
+}
+
+.register-register-button:hover{
+    background-color: var(--pink-colour-hover);
+    color: white;
+}
+
+/* RESULT */
+.register-result{
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #d4edda;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+}
+
+/* ERROR */
+.register-error{
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+}
+
+/* ERROR */
+.register-field-error {
+    margin-top: 5px;
+    margin-bottom: 0;
+
+    color: #a61b29;
+    font-size: 0.9rem;
+}
