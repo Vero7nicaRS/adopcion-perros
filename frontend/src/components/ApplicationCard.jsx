@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import "../styles/ApplicationCard.css";
 
 const API_BASE =
@@ -59,6 +60,7 @@ function getStatusClass(status) {
 
 function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
     const dog = application.dog_detail;
+    const [showUserInfo, setShowUserInfo] = useState(false);
 
     if (!dog) {
         return null;
@@ -122,9 +124,53 @@ function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
                     <strong>Comentarios:</strong>
                     <p>{application.comment || "Sin comentarios"}</p>
                 </div>
+                
+                
+                {isAdmin && application.user_detail && (
+                    <div className="application-user-summary">
+                        <strong>Solicitante:</strong>
+                        <p>
+                            {application.user_detail.first_name ||
+                            application.user_detail.last_name
+                                ? `${application.user_detail.first_name} ${application.user_detail.last_name}`
+                                : application.user_detail.username}
+                        </p>
+
+                        <button
+                            type="button"
+                            className="btn application-user-button"
+                            onClick={() => setShowUserInfo(!showUserInfo)}
+                        >
+                            {showUserInfo
+                                ? "Ocultar datos"
+                                : "Ver datos del solicitante"}
+                        </button>
+
+                        {showUserInfo && (
+                            <div className="application-user-details">
+                                <p>
+                                    <strong>Usuario:</strong>{" "}
+                                    {application.user_detail.username}
+                                </p>
+
+                                <p>
+                                    <strong>Email:</strong>{" "}
+                                    {application.user_detail.email || "No indicado"}
+                                </p>
+
+                                <p>
+                                    <strong>Teléfono:</strong>{" "}
+                                    {application.user_detail.phone || "No indicado"}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+
                 <Link
                     to={`/dogs/${dog.id}`}
-                    className="btn dog-btn"
+                    className="btn application-btn application-view-button"
                     >
                     Ver ficha
                 </Link>
@@ -134,7 +180,7 @@ function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
                         <button
                             onClick={() => onAccept(application.id)}
                             type="button"
-                            className="btn dog-btn-accept"
+                            className="btn application-btn-accept"
                         >
                             Aceptar
                         </button>
@@ -142,7 +188,7 @@ function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
                         <button
                             onClick={() => onReject(application.id)}
                             type="button"
-                            className="btn dog-btn-reject"
+                            className="btn application-btn-reject"
                         >
                             Rechazar
                         </button>

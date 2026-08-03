@@ -12,7 +12,7 @@
     object-fit: cover;
 }
 
-.dog-btn {
+.application-btn {
     background-color: var(--pink-colour);
     border-color: var(--pink-colour);
 
@@ -21,9 +21,10 @@
     font-weight: 600;
 }
 
-.dog-btn:hover {
-    background-color: var(--pink-colour);
+.application-btn:hover {
+    background-color: var(--pink-colour-hover);
     border-color: var(--pink-colour-hover);
+    color: white;
 }
 
 
@@ -81,8 +82,8 @@
     margin-top: 0.75rem;
 }
 
-.dog-btn-accept,
-.dog-btn-reject {
+.application-btn-accept,
+.application-btn-reject {
     flex: 1;
 
     display: inline-flex;
@@ -94,24 +95,75 @@
     border-radius: 8px;
 }
 
-.dog-btn-accept {
+.application-btn-accept {
     background-color: #d1e7dd;
     color: #0f5132;
     border: 1px solid #badbcc;
 }
 
-.dog-btn-accept:hover {
+.application-btn-accept:hover {
     background-color: #badbcc;
     color: #0f5132;
 }
 
-.dog-btn-reject {
+.application-btn-reject {
     background-color: #f8d7da;
     color: #842029;
     border: 1px solid #f5c2c7;
 }
 
-.dog-btn-reject:hover {
+.application-btn-reject:hover {
     background-color: #f5c2c7;
     color: #842029;
+}
+
+/* BUTTON: Ver datos del solicitante */
+.application-user-summary {
+    margin-top: 1rem;
+}
+
+.application-user-summary > p {
+    margin-top: 0.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.application-user-button {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+
+    background-color: #f3ceec;
+    color: #5f2757;
+    border: 1px solid #e5addc;
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+.application-user-button:hover {
+    background-color: #e9b9df;
+    color: #4d1f47;
+    border-color: #dc9ed1;
+}
+
+.application-user-details {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+
+    background-color: #faf2f8;
+    border: 1px solid #efd8ea;
+    border-radius: 8px;
+}
+
+.application-user-details p {
+    margin-bottom: 0.4rem;
+}
+
+.application-user-details p:last-child {
+    margin-bottom: 0;
+}
+
+.application-view-button {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;
 }
