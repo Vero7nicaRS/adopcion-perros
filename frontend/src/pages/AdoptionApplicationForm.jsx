@@ -188,7 +188,7 @@ function AdoptionApplicationForm() {
                     <div
                     className="dog-application-form-result"
                     >
-                    <h3><i class="bi bi-check-circle"></i> Solicitud enviada con éxito</h3>
+                    <h3><i className="bi bi-check-circle"></i> Solicitud enviada con éxito</h3>
                     <p>
                         Tu solicitud de adopción se ha enviado correctamente.
                         La asociación la revisará y se pondrá en contacto contigo si es necesario.
