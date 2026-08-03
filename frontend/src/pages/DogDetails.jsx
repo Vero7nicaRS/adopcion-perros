@@ -58,7 +58,7 @@ function DogDetails() {
 
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
- 
+  const { accessToken, user  } = useAuth(); 
   // Id de la URL
   const { id } = useParams();
 
@@ -127,7 +127,7 @@ function DogDetails() {
         console.log("Limpiando fetch...");
         controller.abort();
         };
-    }, [id]);
+    }, [id, accessToken]);
     /* Renderizados condicionales:
       - Loading.
       - Error.
@@ -186,7 +186,7 @@ function DogDetails() {
                                                 : "No disponible"}
                                         </div>
                                         <div >
-                                            {dogDetail.adoption_status === "AVAILABLE" && (
+                                            {!user?.is_staff &&dogDetail.adoption_status === "AVAILABLE" && (
                                                 <button
                                                     type="button"
                                                     className="dog-adoption-button"
@@ -379,7 +379,7 @@ function DogDetails() {
                         </div>
 
                     <div className= "dog-adoption-down-button">
-                        {dogDetail.adoption_status === "AVAILABLE" && (
+                        {!user?.is_staff && dogDetail.adoption_status === "AVAILABLE" && (
                             <button
                                 type="button"
                                 className="dog-adoption-button"
