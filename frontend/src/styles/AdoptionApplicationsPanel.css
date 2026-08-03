@@ -1,0 +1,13 @@
+.adoption-application-panel {
+  min-height: calc(100vh - var(--altura-navbar));
+  margin-top: var(--altura-navbar);
+  padding: 30px;
+}
+
+
+.adoption-application-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
