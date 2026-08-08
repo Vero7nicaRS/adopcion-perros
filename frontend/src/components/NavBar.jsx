@@ -54,16 +54,16 @@ function NavBar() {
 
            {isAuthenticated ? (
               <>
+              <Nav.Link as={Link} to="/dog-panel">
+                      Panel de solicitudes
+              </Nav.Link>
+
                 <Nav.Link 
                       as="button"
                       onClick={handleLogout}
                   >
                       Cerrar sesión
-                </Nav.Link>
-
-                <Nav.Link as={Link} to="/dog-panel">
-                      Panel de solicitudes
-                </Nav.Link>
+                </Nav.Link>                
 
                 <div className="navbar-user">
                   <i className="bi bi-person-circle"> </i>
@@ -82,10 +82,6 @@ function NavBar() {
                     Gestionar perros
                 </Nav.Link>
             )}
-
-
-
-            
           </Nav>
         </Navbar.Collapse>
       </Container>
