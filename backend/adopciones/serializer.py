@@ -175,8 +175,8 @@ class DogSerializer(serializers.ModelSerializer):
         source='location',  # This tells the serializer to use the 'location' field in the Dog model.
         queryset=Location.objects.all(), # These PK must be in Location.objects.all()
         write_only=True, # Write only 
-        allow_null = True,
-        required = False
+        allow_null = True, # Allow Null 
+        required = False 
     )
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Dog # Modelo
