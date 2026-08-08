@@ -1,0 +1,40 @@
+.admin-dog-list-container {
+  min-height: calc(100vh - var(--altura-navbar));
+  margin-top: var(--altura-navbar);
+  padding: 30px;
+}
+
+
+.admin-dog-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+/* HEADER: Title + Add Button */
+.dog-admin-header{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+
+.dog-admin-add-button{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none; 
+
+    background-color: var(--pink-colour);
+    color: white;
+    font-weight: 600;
+}
+
+.dog-admin-add-button:hover{
+    background-color: var(--pink-colour-hover);
+    color: white;
+}
