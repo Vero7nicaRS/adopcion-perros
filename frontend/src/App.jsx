@@ -13,8 +13,9 @@ import Register from './pages/Register.jsx';
 import AuthProvider from "./context/authentication/AuthProvider";
 import ProtectedRoute from './context/authentication/ProtectedRoute.jsx';
 import AdminRoute from './context/authentication/AdminRoute.jsx';
-import AdminPanel from './pages/AdminPanel.jsx';
-import Applications from './pages/AdoptionApplicationsPanel.jsx';
+import AdoptionApplicationsPanel from './pages/AdoptionApplicationsPanel.jsx';
+import AdminDogList from './pages/AdminDogList.jsx';
+import DogForm from './pages/DogForm.jsx';
 
 function App() {
   return (
@@ -38,17 +39,34 @@ function App() {
           <Route path= "/dog-panel/"
                 element = {
                   <ProtectedRoute>
-                    <Applications/>
+                    <AdoptionApplicationsPanel/>
                   </ProtectedRoute>
                 }
           />
 
-          <Route path="/admin" 
+          <Route path="/admin/dogs" 
                 element ={
                   <AdminRoute>
-                    <AdminPanel />
+                    <AdminDogList />
                   </AdminRoute>
                 } />
+          
+          {/* EDIT A DOG */}
+          <Route path="/dogs/:id/edit" 
+              element ={
+                <AdminRoute>
+                  <DogForm />
+                </AdminRoute>
+              } />
+
+          { /* ADD A ADD */}
+          <Route path="/admin/dogs/add" 
+              element ={
+                <AdminRoute>
+                  <DogForm />
+                </AdminRoute>
+              } />
+
           
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register /> } />
