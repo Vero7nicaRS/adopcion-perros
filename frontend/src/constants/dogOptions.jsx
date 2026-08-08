@@ -1,7 +1,6 @@
 export const SEX_OPTIONS = [
     { value: "MALE", label: "Macho" },
-    { value: "FEMALE", label: "Hembra" },
-    { value: "UNKNOWN", label: "Desconocido" }
+    { value: "FEMALE", label: "Hembra" }
 ];
 
 export const SIZE_OPTIONS = [
