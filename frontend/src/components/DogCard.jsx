@@ -39,16 +39,16 @@ function DogCard({ dog }) {
       <div className="card-body">
         <h5 className="card-title">{dog.name}</h5>
          <p className="card-text">
-            Sexo:
+            <strong>Sexo: </strong>
             {dog.sex === "MALE" ? " Macho" : dog.sex === "FEMALE" ? " Hembra" : " Desconocido"}
         </p>
         <p className="card-text">
-            Raza:
+            <strong>Raza: </strong>
             {dog.breed ? " " + dog.breed : " Desconocida"}
         </p>
        
         <p className="card-text">
-            Edad: {formatAge(
+            <strong>Edad: </strong> {formatAge(
                 dog.estimated_age,
                 dog.estimated_age_unit
             )}
