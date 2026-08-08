@@ -171,6 +171,13 @@ class DogSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    location_id = serializers.PrimaryKeyRelatedField( # Use PrimaryKeyRelatedField to accept a list of temperament IDs.
+        source='location',  # This tells the serializer to use the 'location' field in the Dog model.
+        queryset=Location.objects.all(), # These PK must be in Location.objects.all()
+        write_only=True, # Write only 
+        allow_null = True,
+        required = False
+    )
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Dog # Modelo
         fields = ["id","name", "estimated_age", "estimated_age_unit", 
@@ -178,7 +185,8 @@ class DogSerializer(serializers.ModelSerializer):
                   "dog_compatibility", "cat_compatibility", "children_compatibility", 
                   "has_special_needs","special_needs_description",
                   "is_sterilized", "is_vaccinated", "looking_for_home_since", 
-                  "location", "adoption_status",
+                  "location", "location_id",
+                  "adoption_status",
                   "main_photograph" , "temperament_ids",
                   "videos", "photographs"
                   ] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
