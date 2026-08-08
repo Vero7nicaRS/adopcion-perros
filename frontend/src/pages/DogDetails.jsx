@@ -71,7 +71,7 @@ function DogDetails() {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated} = useAuth();
 
   // handler
   const handleAdoptionClick = () => {
@@ -95,7 +95,7 @@ function DogDetails() {
         setError(null);
 
         try {
-            // 1) Se obtiene los datos del perro "id"
+            // Se obtiene los datos del perro "id"
             const dogResponse = await fetch(`${API_BASE}/adopta_tu_canino/perros/${id}/`);
             if (!dogResponse.ok){
                 throw new Error(`ERROR HTTP: No se pudo cargar los detalles del perro ${id} - ${dogResponse.status}`);
