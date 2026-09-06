@@ -10,6 +10,9 @@ import useAuth from "../context/authentication/useAuth";
 // Components
 import ApplicationCard from "../components/ApplicationCard"
 
+// Constantes
+import {APPLICATIONS_STATUS_OPTIONS} from "../constants/dogOptions"
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function AdoptionApplicationsPanel() {
@@ -18,13 +21,23 @@ function AdoptionApplicationsPanel() {
     const [applications, setApplications] = useState([]); // Datos del listado de perros
     const [loading, setLoading] = useState(true); // Indica si los datos están cargados o no.
     const [error, setError] = useState(null); // Indica si hay un error o no.
-
-
     const { accessToken, user  } = useAuth(); 
-    const controller = new AbortController()
 
+    // Filtros
+    const [statusApplicationFilter, setStatusStatusApplicationFilter] = useState("");
 
+    const handleStatusApplicationFilterChange = (e) => {
+        setStatusStatusApplicationFilter(e.target.value);
+    }
 
+    const filteredApplications = applications ? applications.filter((application) => {
+        const matchesApplication = !statusApplicationFilter || application.status === statusApplicationFilter;
+
+        return (
+            matchesApplication
+        );
+
+    }) : [] ;
     /* Al pulsar el botón de ACEPTAR se activa la función */
     const handleAccept = async (applicationId) => {
         try{
@@ -144,7 +157,7 @@ function AdoptionApplicationsPanel() {
     }
 
     useEffect(() => {
-
+        const controller = new AbortController()
         if (accessToken){
             fetchApplications();
         }
@@ -164,12 +177,39 @@ function AdoptionApplicationsPanel() {
         <>
             <div className="adoption-application-panel">
                 <h1>    {user?.is_staff
-                            ? "Solicitudes de adopción 📋"
-                            : "Mis solicitudes 📋"}
+                            ? "Solicitudes de adopción "
+                            : "Mis solicitudes "}
                 </h1>
+
+                {/* FILTROS */}
+                <div className= "adoption-application-container">
+                    <div className="dog-filter-flex">
+                        <div className="adoption-application-item">
+                            <label 
+                                htmlFor="sizeFilter"
+                                className="dog-form-label">
+                                Estado de la solicitud
+                            </label>
+                            <select
+                                id="sizeFilter"
+                                value={statusApplicationFilter}
+                                className = "adoption-application-text"
+                                onChange={handleStatusApplicationFilterChange}
+                                >
+                                    <option value="">Todos </option>
+            
+                                    {APPLICATIONS_STATUS_OPTIONS.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div className="adoption-application-list">
-                    {applications && applications.length > 0 ? (               
-                        applications.map((application) => (
+                    {filteredApplications && filteredApplications.length > 0 ? (               
+                        filteredApplications.map((application) => (
                             <ApplicationCard
                                 key={application.id}
                                 application={application}
