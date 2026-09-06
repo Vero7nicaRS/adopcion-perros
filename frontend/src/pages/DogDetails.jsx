@@ -11,6 +11,7 @@ import useAuth from "../context/authentication/useAuth";
 // Components
 import DogInfoDetail from "../components/DogInfoDetail"
 import DogPhotographs from "../components/DogPhotographs";
+import DogMap from "../components/DogMap.jsx";
 
 import { API_BASE_URL } from '../api/url_api'
 
@@ -328,6 +329,31 @@ function DogDetails() {
                                                     {t.name}
                                                 </span>
                                             )}
+                                        </div>
+                                    <hr></hr>
+                                      <h2>
+                                        <i className={`bi bi-capsule-pill`}></i>{" "}
+                                            Necesidades especiales
+                                        </h2> 
+                                        <div>
+                                            { dogDetail?.has_special_needs 
+                                                ? dogDetail?.special_needs_description 
+                                                : "No tiene necesidades especiales"
+                                            }
+                                        </div>
+                                        <hr></hr>
+                                        <div>
+
+                                            {dogDetail.location && (
+                                                <>
+                                                    <h2>
+                                                        <i className="bi bi-pin-map"></i>
+                                                        Ubicación en el mapa</h2>
+
+                                                    <DogMap location={dogDetail.location} />
+                                                </>
+                                            ) 
+                                            }
                                         </div>
                                 </div>
                             </div>
