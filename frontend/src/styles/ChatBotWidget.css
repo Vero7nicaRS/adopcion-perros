@@ -1,0 +1,156 @@
+.chatbot-container{
+    position: fixed;
+    right: 30px;
+    bottom: 90px;
+
+    width: 380px;
+    height: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+    border-radius: 18px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chatbot-messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.chatbot-message {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 15px;
+}
+
+.chatbot-message.user {
+    align-self: flex-end;
+    background-color: #e6e6e6;
+}
+
+.chatbot-message.bot {
+    align-self: flex-start;
+    background-color: #f5f5f5;
+}
+
+.chatbot-message p {
+    margin: 0;
+}
+
+.chatbot-message span {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+}
+
+.chatbot-button-isOpen{
+    position: fixed;
+    right: 30px;
+    bottom: 25px;
+
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+    border: none;
+
+    font-size: 24px;
+
+    cursor: pointer;
+    z-index: 1000;
+    background-color: var(--pink-colour);
+}
+
+.chatbot-form {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+.chatbot-form textarea {
+    flex: 1;
+    resize: none; 
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* HEADER*/
+.chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--pink-colour);
+}
+
+.chatbot-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbot-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.chatbot-subtitle {
+    margin: 3px 0 0 0;
+    font-size: 0.9rem;
+}
+
+.send-button-form{
+    width: 50px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ffa6a644;
+}
+
+.close-button-form{
+    width: 50px;
+    border: none;
+    cursor: pointer;
+}
+
+/* RECOMMEND */
+.chatbot-recommendations {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chatbot-recommendation {
+    padding: 12px;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    background-color: white;
+}
+
+.chatbot-recommendation-name {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* BUTTON RESTART */
+.chatbot-restart-button {
+    background-color: #ffa6a644;    
+    border-color: #ffa6a644;;
+    border-radius: 50px;
+    color: black;
+    font-weight: 600;
+}
+
+.chatbot-restart-button:hover {
+    background-color: var(--pink-colour);
+    border-color: var(--pink-colour-hover);
+}

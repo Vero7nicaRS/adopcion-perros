@@ -16,6 +16,7 @@ import AdminRoute from './context/authentication/AdminRoute.jsx';
 import AdoptionApplicationsPanel from './pages/AdoptionApplicationsPanel.jsx';
 import AdminDogList from './pages/AdminDogList.jsx';
 import DogForm from './pages/DogForm.jsx';
+import ChatBotWidget from './components/ChatBotWidget.jsx';
 
 function App() {
   return (
@@ -72,7 +73,7 @@ function App() {
           <Route path="/register" element={<Register /> } />
           <Route path='*' element={<p>404: Página no encontrada</p>} />
         </Routes>
-
+        <ChatBotWidget></ChatBotWidget>
         {/* FOOTER */}
         <Footer></Footer>
       </AuthProvider>

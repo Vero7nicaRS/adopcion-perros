@@ -15,7 +15,7 @@ function formatAge(age, unit) {
     return `${age} ${age === 1 ? "año" : "años"}`;
 }
 
-function DogCard({ dog }) {
+function DogCard({ dog , compatibility }) {
   const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
   const photographUrl = dog.main_photograph
@@ -53,6 +53,13 @@ function DogCard({ dog }) {
                 dog.estimated_age_unit
             )}
         </p>
+
+        {compatibility && (
+            <p className="card-text">
+                <strong>Compatibilidad:</strong>{" "}
+                {compatibility.score}/{compatibility.max_score}
+            </p>
+        )}
         
         <Link
           to={`/dogs/${dog.id}`}
