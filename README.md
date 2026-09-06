@@ -12,7 +12,7 @@ La aplicación permite consultar la información de los perros disponibles para 
 
 Los usuarios podrán registrarse, iniciar sesión y enviar solicitudes de adopción para los perros disponibles. Por otra parte, los usuarios autorizados podrán gestionar la información de los animales y gestionar las solicitudes recibidas, pudiendo rechazarlas o aceptarlas.
 
-Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios en la búsqueda de un perro compatible con sus circunstancicias y preferencias. A través de una conversación en lenguaje natural, el chatbot recopia información del usuario y proporciona recomendaciones utilizando un sistema de reglas de negocio.
+Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios en la búsqueda de un perro compatible con su estilo de vida y preferencias. A través de una conversación en lenguaje natural, el chatbot recopia información del usuario y proporciona recomendaciones utilizando un sistema de reglas de negocio.
 
 ## 🆗 Funcionalidades implementadas
 
@@ -31,6 +31,7 @@ Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios e
 
 ## 👷🏽‍♀️ Funcionalidades previstas
 
+- Actualización de la gestión de perros.
 - Gestionar las fotografías y vídeos asociado a los perros.
 - Gestionar la ubicación asociada a los perros.
 - Filtrado de información mediante parámetros de consulta.
