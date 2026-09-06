@@ -11,8 +11,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny, IsAdminUser
 
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
+from .chatbot import ( create_empty_preferences, extract_preferences, 
+                      update_preferences, get_missing_preferences,
+                      get_missing_preferences, get_next_question
+                      )
 
+from .recommendation import recommend_dogs
 # --------------------------
 #     USER VIEWSET
 # --------------------------
@@ -204,3 +210,135 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
+
+
+# --------------------------------
+#          CHATBOT API VIEW
+# --------------------------------
+@api_view(['POST'])
+def chatbot(request):
+
+    # {
+    #   "message": "Vivo en un piso y tengo un gato"
+    #   "preferences": null
+    # } 
+    #
+
+    # 1. Obtiene el primer mensaje del usuario
+    message = request.data.get("message")
+    current_preferences = request.data.get("preferences")
+
+    if not message:
+        return Response(
+            {
+                "error": "El mensaje es obligatorio."
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # 2. Crea el esqueleto de las preferencias del usuario vacío.
+    # {
+    #    "housing": None,
+    #    "human_activity_level": None,
+    #    "has_children": None,
+    #    "has_dogs": None,
+    #    "has_cats": None,
+    #    "preferred_temperament": [],
+    # }
+    if current_preferences is None:
+        current_preferences = create_empty_preferences()
+
+    # 3. Comprueba qué información falta antes de analizar el mensaje del usuario.
+    missing_preferences = get_missing_preferences(
+        current_preferences
+    )
+
+    expected_preference = None
+
+    if missing_preferences:
+        expected_preference = missing_preferences[0]
+
+    # 4. Extrae las preferencias del usuario en base al dato que está esperando el chatbot.
+    new_preferences = extract_preferences(message, expected_preference)
+
+    # 5. Actualiza las preferencias del usuario (vacio --> añade datos)
+    updated_preferences = update_preferences(
+        current_preferences,
+        new_preferences
+    )
+
+    # 6. Comprueba qué información todavía no se ha obtenido
+    missing_preferences = get_missing_preferences(
+        updated_preferences
+    )
+
+    # 7. Si falta información por recabar, realiza preguntas
+    if missing_preferences:
+        next_question = get_next_question(
+            updated_preferences
+        )
+
+        return Response(
+            {
+                "preferences": updated_preferences,
+                "message": next_question,
+                "recommendations": [],
+                "finished": False # La conversación no ha finalizado todavía.
+            },
+            status=status.HTTP_200_OK
+        )
+
+    # 8 . Si tiene toda la información, devuelve las preferencias y un mensaje.
+    #
+
+    #{'dog': 
+    #   <Dog: PerroNuevo2 (FEMALE, None) - ID 23>, 
+    #   'compatibility': 
+    #   {
+    #       'excluded': False, 
+    #       'score': 4, 
+    #       'max_score': 5, 
+    #       'activity_compatibility': 'GOOD', 
+    #       'housing_compatibility': 'GOOD', 
+    #       'children_evaluation': 'UNKNOWN', 
+    #       .................
+    #    }
+    #}
+    #
+    recommendations = recommend_dogs(updated_preferences) 
+    serialized_recommendations = []
+
+    for recommendation in recommendations:
+        dog = recommendation["dog"] # <Dog: PerroNuevo2 (FEMALE, None) - ID 23>,
+        compatibility = recommendation["compatibility"] 
+        # 'compatibility': 
+        #   {
+        #       'excluded': False, 
+        # ........ 
+        #   }
+
+        serialized_recommendations.append({
+            "dog": DogSerializer(dog).data,  # {'id': x, 'name': ... , 'estimated_age': ....}
+            "compatibility": compatibility
+        })
+
+    # Si no hay recomendaciones, significa que no hay perros compatibles con las preferencias del usuario.
+    if not serialized_recommendations:
+        return Response(
+            {
+                "preferences": updated_preferences,
+                "message": "No he encontrado ningún perro compatible con los criterios indicados.",
+                "recommendations": [],
+                "finished": True # La conversación ha finalizado.
+            },
+            status=status.HTTP_200_OK
+        )
+    return Response(
+        {
+            "preferences": updated_preferences,
+            "message": "He encontrado algunos perros que podrían ser compatibles contigo 😀",
+            "recommendations": serialized_recommendations,
+            "finished": True # La conversación ha finalizado.
+        },
+        status=status.HTTP_200_OK
+    )

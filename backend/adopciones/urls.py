@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, LocationViewSet, TemperamentViewSet, DogViewSet, PhotographViewSet, VideoViewSet, AdoptionApplicationViewSet, CurrentUserView
+from .views import UserViewSet, LocationViewSet, TemperamentViewSet, DogViewSet, PhotographViewSet, VideoViewSet, AdoptionApplicationViewSet, CurrentUserView, chatbot
 
 router = DefaultRouter()
 
@@ -20,6 +20,12 @@ urlpatterns = [
             "usuarios/me/",
             CurrentUserView.as_view(),
             name="current-user"
+        ),
+
+    path(
+            "chatbot/", 
+            chatbot, 
+            name="chatbot"
         ),
 
     path("", include(router.urls)) # urlpatterns = router.urls
