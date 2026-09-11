@@ -18,6 +18,7 @@ import { API_BASE_URL } from '../api/url_api'
 // Link, Navigate
 import { Link , useNavigate } from "react-router-dom";
 
+// Formato para los iconos que son booleanos "Sí/No"
 function formatBoolean(value) {
     return value ? (
         <>
@@ -30,6 +31,7 @@ function formatBoolean(value) {
     );
 }
 
+// Formato para los iconos de "Compatibilidad con..."
 function formatCompatibility(value){
         return value.toUpperCase() === "YES" ? (
         <>
