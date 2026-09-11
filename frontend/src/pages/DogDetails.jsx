@@ -43,7 +43,7 @@ function formatCompatibility(value){
         </>
     ) : (
         <> 
-            <i class="bi bi-question"></i> Desconocida
+            <i className="bi bi-question"></i> Desconocida
         </>
     );
 }
