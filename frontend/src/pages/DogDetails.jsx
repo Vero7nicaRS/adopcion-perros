@@ -30,6 +30,22 @@ function formatBoolean(value) {
     );
 }
 
+function formatCompatibility(value){
+        return value.toUpperCase() === "YES" ? (
+        <>
+            <i className="bi bi-check2 text-success"></i> Sí
+        </>
+    ) : value.toUpperCase() === "NO" ? (
+        <>
+            <i className="bi bi-x text-danger"></i> No
+        </>
+    ) : (
+        <> 
+            <i class="bi bi-question"></i> Desconocida
+        </>
+    );
+}
+
 function formatAge(age, unit) {
     if (age === null || age === undefined) {
         return "Desconocida";
@@ -254,7 +270,7 @@ function DogDetails() {
                                             <DogInfoDetail
                                                     title= "Compatibilidad con perros"
                                                     icon = ""
-                                                    value = {formatBoolean(dogDetail.dog_compatibility)} 
+                                                    value = { formatCompatibility(dogDetail.dog_compatibility)} 
                                             ></DogInfoDetail>
                                         </div>
 
@@ -262,7 +278,7 @@ function DogDetails() {
                                             <DogInfoDetail
                                                     title= "Compatibilidad con gatos"
                                                     icon = ""
-                                                    value = {formatBoolean(dogDetail.cat_compatibility)} 
+                                                    value = {formatCompatibility(dogDetail.cat_compatibility)} 
                                             ></DogInfoDetail>
                                         </div>
 
@@ -270,7 +286,7 @@ function DogDetails() {
                                             <DogInfoDetail
                                                     title= "Compatibilidad con niños"
                                                     icon = ""
-                                                    value = {formatBoolean(dogDetail.children_compatibility)} 
+                                                    value = {formatCompatibility(dogDetail.children_compatibility)} 
                                             ></DogInfoDetail>
                                         </div>
 
