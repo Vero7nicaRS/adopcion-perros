@@ -11,6 +11,9 @@ backend/venv/
 # Fotografías y vídeos de los perros
 backend/media/
 
+# Archivos estáticos recopilados (para producción)
+backend/staticfiles/
+
 # Base de datos
 backend/db.sqlite3
 
