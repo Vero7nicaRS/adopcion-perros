@@ -17,6 +17,10 @@ backend/staticfiles/
 # Base de datos
 backend/db.sqlite3
 
+# Datos
+backend/datadump.json
+backend/datadump_utf8.json
+
 # Variables de entorno
 backend/.env
 
