@@ -18,8 +18,10 @@ function formatAge(age, unit) {
 function DogCardAdmin({ dog }) {
 
   const photographUrl = dog.main_photograph
-                          ? `${API_BASE_URL}${dog.main_photograph}`
-                          : null;
+    ? dog.main_photograph.startsWith("http")  // Producción
+        ? dog.main_photograph // Localhost
+        : `${API_BASE_URL}${dog.main_photograph}`
+    : null;
 
   return (
     <div className="card dog-card shadow">
