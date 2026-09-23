@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../api/url_api";
 
 // CSS
 import "../styles/ChatBotWidget.css";
@@ -13,7 +14,6 @@ function getCurrentTime () {
 };
 
 function ChatBotWidget() {
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         {
@@ -83,7 +83,7 @@ function ChatBotWidget() {
         setSubmitting(true);
         try {
 
-            const response = await fetch(`${API_BASE}/adopta_tu_canino/chatbot/`,
+            const response = await fetch(`${API_BASE_URL}/adopta_tu_canino/chatbot/`,
                 {
                     method: "POST",
                     headers: {

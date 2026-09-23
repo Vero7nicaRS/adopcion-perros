@@ -15,7 +15,7 @@ import useAuth from "../context/authentication/useAuth";
 import DogSummary from "../components/DogSummary";
 import DogInfoDetail from "../components/DogInfoDetail"
 
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+import { API_BASE_URL } from '../api/url_api'
 
     
 function Login() {
@@ -78,7 +78,7 @@ function Login() {
 
         setSubmitting(true);
         try {
-          const response = await fetch(`${API_BASE}/api/token/`, {
+          const response = await fetch(`${API_BASE_URL}/api/token/`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
 

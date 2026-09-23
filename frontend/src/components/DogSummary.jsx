@@ -1,5 +1,8 @@
 //CSS
 import "../styles/DogSummary.css"
+
+import { API_BASE_URL } from "../api/url_api";
+
 // Components
 import DogInfoDetail from "../components/DogInfoDetail"
 import DogPhotographs from "../components/DogPhotographs";
@@ -17,8 +20,6 @@ function formatAge(age, unit) {
 }
 
 function DogSummary( {dog}) {
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-
     return( 
         <>
 
@@ -29,7 +30,7 @@ function DogSummary( {dog}) {
                             <div className="col-md-4">
                                 {dog.main_photograph ? (
                                     <img
-                                        src={`${API_BASE}${dog.main_photograph}`}
+                                        src={`${API_BASE_URL}${dog.main_photograph}`}
                                         alt={`Fotografía de ${dog.name}`}
                                     />
                                 ) : (

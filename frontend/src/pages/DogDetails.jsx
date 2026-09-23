@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 
+import { API_BASE_URL } from '../api/url_api'
+
 // Context
 import useAuth from "../context/authentication/useAuth";
 
@@ -12,8 +14,6 @@ import useAuth from "../context/authentication/useAuth";
 import DogInfoDetail from "../components/DogInfoDetail"
 import DogPhotographs from "../components/DogPhotographs";
 import DogMap from "../components/DogMap.jsx";
-
-import { API_BASE_URL } from '../api/url_api'
 
 // Link, Navigate
 import { Link , useNavigate } from "react-router-dom";
@@ -75,8 +75,6 @@ function formatDate(date) {
 
 function DogDetails() {
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-
   const { accessToken, user  } = useAuth(); 
   // Id de la URL
   const { id } = useParams();
@@ -115,7 +113,7 @@ function DogDetails() {
 
         try {
             // Se obtiene los datos del perro "id"
-            const dogResponse = await fetch(`${API_BASE}/adopta_tu_canino/perros/${id}/`);
+            const dogResponse = await fetch(`${API_BASE_URL}/adopta_tu_canino/perros/${id}/`);
             if (!dogResponse.ok){
                 throw new Error(`ERROR HTTP: No se pudo cargar los detalles del perro ${id} - ${dogResponse.status}`);
             }
@@ -168,7 +166,7 @@ function DogDetails() {
                             <div className="col-md-4">
                                 {dogDetail.main_photograph ? (
                                     <img
-                                        src={`${API_BASE}${dogDetail.main_photograph}`}
+                                        src={`${API_BASE_URL}${dogDetail.main_photograph}`}
                                         className="dog-detail-photo"
                                         alt={`Fotografía de ${dogDetail.name}`}
                                     />

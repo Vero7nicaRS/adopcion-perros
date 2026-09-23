@@ -5,14 +5,14 @@ import "../styles/Register.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { API_BASE_URL } from '../api/url_api'
+
 // Link
 import { Link , useNavigate } from "react-router-dom";
 
 // Components
 import DogSummary from "../components/DogSummary";
 import DogInfoDetail from "../components/DogInfoDetail"
-
-    const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function Register() {
 
@@ -108,7 +108,7 @@ function Register() {
 
         setSubmitting(true);
         try {
-          const response = await fetch(`${API_BASE}/adopta_tu_canino/usuarios/`, {
+          const response = await fetch(`${API_BASE_URL}/adopta_tu_canino/usuarios/`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
 

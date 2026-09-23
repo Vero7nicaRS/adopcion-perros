@@ -4,6 +4,8 @@ import "../styles/AdoptionApplicationsPanel.css";
 // Modulos
 import { useEffect, useState } from "react";
 
+import { API_BASE_URL } from "../api/url_api";
+
 // Context
 import useAuth from "../context/authentication/useAuth";
 
@@ -12,8 +14,6 @@ import ApplicationCard from "../components/ApplicationCard"
 
 // Constantes
 import {APPLICATIONS_STATUS_OPTIONS} from "../constants/dogOptions"
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function AdoptionApplicationsPanel() {
 
@@ -42,7 +42,7 @@ function AdoptionApplicationsPanel() {
     const handleAccept = async (applicationId) => {
         try{
             const response = await fetch(
-                `${API_BASE}/adopta_tu_canino/solicitud-adopcion/${applicationId}/accept_status/`,
+                `${API_BASE_URL}/adopta_tu_canino/solicitud-adopcion/${applicationId}/accept_status/`,
                 {
                     method: "PATCH",
                     headers: {
@@ -79,7 +79,7 @@ function AdoptionApplicationsPanel() {
     const handleReject = async (applicationId) => {
         try{
             const response = await fetch(
-                `${API_BASE}/adopta_tu_canino/solicitud-adopcion/${applicationId}/reject_status/`,
+                `${API_BASE_URL}/adopta_tu_canino/solicitud-adopcion/${applicationId}/reject_status/`,
                 {
                     method: "PATCH",
                     headers: {
@@ -125,7 +125,7 @@ function AdoptionApplicationsPanel() {
         try {
             // 1) Se obtiene el listado de perros  
             const panelUserResponse = await fetch(
-                `${API_BASE}/adopta_tu_canino/solicitud-adopcion/`,
+                `${API_BASE_URL}/adopta_tu_canino/solicitud-adopcion/`,
                 {
                     headers: {
                         Authorization: `Bearer ${accessToken}`

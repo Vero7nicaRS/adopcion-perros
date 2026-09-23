@@ -8,13 +8,13 @@ import DogCardAdmin from "../components/DogCardAdmin"
 // Constantes
 import {AGE_OPTIONS, SEX_OPTIONS, SIZE_OPTIONS} from "../constants/dogOptions"
 
+import { API_BASE_URL } from "../api/url_api";
+
 // Link
 import { Link , useNavigate } from "react-router-dom";
 
 function AdminDogList() {
   
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-
   // Estados de UseEffect
   const [dogList, setDogList] = useState(null); // Datos del listado de perros
 
@@ -126,7 +126,7 @@ function AdminDogList() {
     const fetchDog = async () => {
       try {
         // Se obtiene el listado de perros
-        const dogResponse = await fetch(`${API_BASE}/adopta_tu_canino/perros/`);
+        const dogResponse = await fetch(`${API_BASE_URL}/adopta_tu_canino/perros/`);
         if (!dogResponse.ok){
           throw new Error(`ERROR HTTP: No se pudo cargar el listado de perros ${dogResponse.status}`);
         }

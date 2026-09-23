@@ -16,10 +16,9 @@ function formatAge(age, unit) {
 }
 
 function DogCardAdmin({ dog }) {
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
   const photographUrl = dog.main_photograph
-                          ? `${API_BASE}${dog.main_photograph}`
+                          ? `${API_BASE_URL}${dog.main_photograph}`
                           : null;
 
   return (
