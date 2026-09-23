@@ -166,7 +166,11 @@ function DogDetails() {
                             <div className="col-md-4">
                                 {dogDetail.main_photograph ? (
                                     <img
-                                        src={`${API_BASE_URL}${dogDetail.main_photograph}`}
+                                        src={
+                                            dogDetail.main_photograph.startsWith("http") // Producción
+                                                ? dogDetail.main_photograph // Localhost
+                                                : `${API_BASE_URL}${dogDetail.main_photograph}`
+                                        }
                                         className="dog-detail-photo"
                                         alt={`Fotografía de ${dogDetail.name}`}
                                     />
