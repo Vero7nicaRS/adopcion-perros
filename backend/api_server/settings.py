@@ -165,6 +165,22 @@ STATIC_ROOT = BASE_DIR / "staticfiles" # Para producción, se deben recopilar lo
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 # ---  
+if DATABASE_TYPE == "production":
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "access_key": os.environ.get("ACCESS_KEY_ID"),
+                "secret_key": os.environ.get("SECRET_ACCESS_KEY"),
+                "bucket_name": os.environ.get("RAILWAY_BUCKET_NAME"),
+                "region_name": os.environ.get("REGION"),
+                "endpoint_url": os.environ.get("ENDPOINT"),
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 # --- Añadido para Usuarios: 
 AUTH_USER_MODEL = 'adopciones.User'
