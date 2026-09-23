@@ -13,12 +13,14 @@ import {
 // Modulos
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import { API_BASE_URL } from '../api/url_api'
+
 // Context
 import useAuth from "../context/authentication/useAuth";
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 // Link
-import { Link , useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 function DogForm() {
 
@@ -269,8 +271,8 @@ function DogForm() {
         setSubmitting(true);
         try {
             const requestUrl = isEditing
-                ? `${API_BASE}/adopta_tu_canino/perros/${id}/`
-                : `${API_BASE}/adopta_tu_canino/perros/`;
+                ? `${API_BASE_URL}/adopta_tu_canino/perros/${id}/` // Editar (visualizar datos del perro)
+                : `${API_BASE_URL}/adopta_tu_canino/perros/`;      // Agregar
 
             const requestMethod = isEditing ? "PATCH" : "POST";
             console.log("Metodo: ",requestMethod);
@@ -346,7 +348,7 @@ function DogForm() {
                 
                 // Se obienen los temperamentos
                 const temperamentResponse = await fetch(
-                    `${API_BASE}/adopta_tu_canino/temperamentos`,
+                    `${API_BASE_URL}/adopta_tu_canino/temperamentos`,
                     {
                         signal: controller.signal
                     }
@@ -364,7 +366,7 @@ function DogForm() {
 
                 // Se obtienen las localizaciones
                 const locationResponse = await fetch(
-                    `${API_BASE}/adopta_tu_canino/ubicaciones/`,
+                    `${API_BASE_URL}/adopta_tu_canino/ubicaciones/`,
                     {
                         signal: controller.signal
                     }
@@ -379,12 +381,10 @@ function DogForm() {
                 setLocations(locationResult);
                 console.log("Ubicaciones recibidas:", locationResult);
 
-
-
                 let dogFormResult = null;
                 if(isEditing){
                     // Se obtiene los datos del perro "id"
-                    const dogResponse = await fetch(`${API_BASE}/adopta_tu_canino/perros/${id}/`,
+                    const dogResponse = await fetch(`${API_BASE_URL}/adopta_tu_canino/perros/${id}/`,
                         {
                             signal: controller.signal
                         }
