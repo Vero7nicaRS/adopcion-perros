@@ -172,7 +172,7 @@ if DATABASE_TYPE == "production":
             "OPTIONS": {
                 "access_key": os.environ.get("ACCESS_KEY_ID"),
                 "secret_key": os.environ.get("SECRET_ACCESS_KEY"),
-                "bucket_name": os.environ.get("RAILWAY_BUCKET_NAME"),
+                "bucket_name": os.environ.get("BUCKET"),
                 "region_name": os.environ.get("REGION"),
                 "endpoint_url": os.environ.get("ENDPOINT"),
             },
