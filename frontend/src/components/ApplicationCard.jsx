@@ -64,7 +64,9 @@ function ApplicationCard({ application, isAdmin, onAccept, onReject}) {
     }
 
     const photographUrl = dog.main_photograph
-        ? `${API_BASE_URL}${dog.main_photograph}`
+        ? dog.main_photograph.startsWith("http")  // Producción
+            ? dog.main_photograph // Localhost
+            : `${API_BASE_URL}${dog.main_photograph}`
         : null;
 
     return (
