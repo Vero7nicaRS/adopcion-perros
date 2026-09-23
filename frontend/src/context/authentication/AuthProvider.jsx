@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
-
-const API_BASE =
-    import.meta.env.VITE_API_BASE_URL ||
-    "http://127.0.0.1:8000";
+import { API_BASE_URL } from '../api/url_api'
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
@@ -23,7 +20,6 @@ function AuthProvider({ children }) {
     const logout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-
         setAccessToken(null);
         setRefreshToken(null);
         setUser(null);
@@ -32,7 +28,7 @@ function AuthProvider({ children }) {
     const fetchCurrentUser = async (token) => {
         try {
             const response = await fetch(
-                `${API_BASE}/adopta_tu_canino/usuarios/me/`,
+                `${API_BASE_URL}/adopta_tu_canino/usuarios/me/`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
