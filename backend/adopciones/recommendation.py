@@ -1,7 +1,8 @@
 from .models import Dog
-# get_activity_level: define the dog activity level relation
-#
-#
+# get_activity_level: define el nivel de actividad del perro según su temperamento.
+# - Si es Enérgico o Intenso, se considera de actividad alta.
+# - Si es Activo o Juguetón, se considera de actividad media.
+# - Si es Tranquilo, se considera de actividad baja.
 def get_activity_level(dog):
     # Temperaments List 
     temperaments = set(
@@ -13,45 +14,12 @@ def get_activity_level(dog):
         return "HIGH"
     if {"Activo", "Juguetón"} & temperaments:
         return "MEDIUM"
-    if {"Tranquilo"} in temperaments:
+    if {"Tranquilo"} & temperaments:
         return "LOW"
 
     return "UNKNOWN"
 
-# get_housing_compatibility: define the dog housing compatibility relation
-#
-#
-def get_housing_compatibility(dog, housing):
-    activity_level = get_activity_level(dog)
-
-    if housing == "HOUSE":
-        return "GOOD"
-
-    if housing == "APARTMENT":
-        if dog.size == "SMALL":
-            return "GOOD"
-
-        if dog.size == "MEDIUM":
-            if activity_level == "HIGH":
-                return "LOWER"
-
-            if activity_level == "UNKNOWN":
-                return "UNKNOWN"
-
-            return "GOOD"
-
-        if dog.size == "LARGE":
-            if activity_level == "LOW":
-                return "GOOD"
-
-            if activity_level == "UNKNOWN":
-                return "UNKNOWN"
-
-            return "LOWER"
-
-    return "UNKNOWN"
-
-# has_excluding_incompatibility: define the exluding incompatibility relation
+# has_excluding_incompatibility: comprueba si existe alguna compatibilidad excluyente entre el perro y las especificaciones del usuario.
 # True: descarta al animal.
 # False: no descarta al animal.
 def   has_excluding_incompatibility(dog, preferences):
@@ -75,7 +43,7 @@ def   has_excluding_incompatibility(dog, preferences):
 
     return False
 
-# get_activity_compatibility: define the human and dog activity relation
+# get_activity_compatibility: define el nivel de compatibilidad entre la actividad humana y el perro
 # Una persona con actividad alta puede adaptarse a un perro con actividad alta, media o baja.
 # Una persona con actividad media puede adaptarse a un perro con actividad media o baja.
 # Una persona con actividad baja  puede adaptarse a un perro con actividad baja.
@@ -114,11 +82,10 @@ def get_activity_compatibility(dog, human_activity_level):
 
 
 
-# def get_max_score(preferences): define the maximum score 
-# Indica cuál es la puntuación máxima que se puede conseguir
+# def get_max_score(preferences): Indica cuál es la puntuación máxima que se puede conseguir
 #
 def get_max_score(preferences): 
-    max_score = 2 # Incluye: Nivel de actividad + Vivienda
+    max_score = 1 # Incluye: Nivel de actividad
 
     if preferences["has_children"]:
         max_score += 1
@@ -129,8 +96,8 @@ def get_max_score(preferences):
     if preferences["has_cats"]:
         max_score += 1
 
-    if preferences["preferred_temperament"]:
-        max_score += 1
+    if preferences["preferred_temperament"]: 
+        max_score += 1 # Temperamento no suma siempre porque quizás el usuario no tenga preferencia por el temperamento del perro.
 
     return max_score
 
@@ -148,7 +115,6 @@ def calculate_compatibility(dog, preferences):
             "score": 0,
             "max_score": max_score,
             "activity_compatibility": None,
-            "housing_compatibility": None,
             "children_evaluation": None,
             "dogs_evaluation": None,
             "cats_evaluation": None,
@@ -170,19 +136,6 @@ def calculate_compatibility(dog, preferences):
     elif activity_compatibility == "UNKNOWN":
         warnings.append(
             "No se ha podido determinar el nivel de actividad del perro."
-        )
-
-    # Vivienda del usuario
-    housing_compatibility = get_housing_compatibility(
-        dog,
-        preferences["housing"]
-    )
-
-    if housing_compatibility == "GOOD":
-        score += 1
-    elif housing_compatibility == "UNKNOWN":
-        warnings.append(
-            "No se ha podido determinar completamente su adecuación a la vivienda."
         )
 
     # Niños
@@ -243,7 +196,6 @@ def calculate_compatibility(dog, preferences):
         "score": score,
         "max_score": max_score,
         "activity_compatibility": activity_compatibility,
-        "housing_compatibility": housing_compatibility,
         "children_evaluation": children_evaluation,
         "dogs_evaluation": dogs_evaluation,
         "cats_evaluation": cats_evaluation,
@@ -261,7 +213,6 @@ def calculate_compatibility(dog, preferences):
 #       'excluded': False, 
 #       'score': 4, 
 #       'max_score': 5, 'activity_compatibility': 'GOOD', 
-#       'housing_compatibility': 'GOOD', 
 #       'children_evaluation': 'UNKNOWN', 
 #       'dogs_evaluation': None, 
 #       'cats_evaluation': 'YES', 

@@ -17,16 +17,31 @@ client = OpenAI()
 #   - conservar valor anterior
 
 # []
-#   - no se ha mencionado temperamento nuevo
-#   - conservar temperamento anterior
+#   - el usuario indica explícitamente que no tiene
+#     ninguna preferencia de temperamento
 
 # valor real
 #   - actualizar
+#   - en el caso del temperamento, acumular los nuevos
+#     con los indicados anteriormente
+
+# Esqueleto:
+# ¿La preferencia que estoy recorriendo es preferred_temperament?
+# │
+# ├── SÍ
+# │   ├── ¿Tiene valores? → acumular temperamentos
+# │   ├── ¿Es []? → el usuario dice que no tiene preferencia
+# │   └── ¿Es None? → no hacer nada
+# │
+# └── NO
+#    ├── ¿El nuevo valor no es None? → actualizar, ya que el usuario ha indicado
+#    │                                  un valor para esa preferencia.
+#    └── ¿Es None? → no hacer nada, ya que no se ha obtenido información nueva
+#                    sobre esa preferencia en el mensaje actual.
 def update_preferences(current_preferences, new_preferences):
     updated_preferences = current_preferences.copy()
 
 #   {
-#    ('housing', 'APARTMENT'), 
 #    ('human_activity_level', 'LOW' ), 
 #    ('has_dog', TRUE), 
 #    ('has_cat', TRUE),
@@ -37,13 +52,27 @@ def update_preferences(current_preferences, new_preferences):
 #   preference = ('preferred_temperament': ["Tranquilo"])
         new_value = new_preferences[preference]
 
+#   Si se está tratando las preferencias de los temperamentos.
 #   preference === 'preferred_temperament'
         if preference == "preferred_temperament":
-#   Concatena las preferencias actuales con las nuevas.
+#   Si el usuario indica algún temperamento, se acumula con los anteriores.
             if new_value:
+
+                # Si todavía no había indicado ningún temperamento,
+                # se inicializa como una lista vacía para poder concatenar.
+                if updated_preferences[preference] is None:
+                    updated_preferences[preference] = []
+
+                # Concatena los temperamentos anteriores con los nuevos.
                 updated_preferences[preference] = list(
                     set(updated_preferences[preference] + new_value)
                 )
+
+            # Si indica explícitamente que no tiene ninguna preferencia. Devuelve un array vacío.
+            elif new_value == []:
+                updated_preferences[preference] = []
+
+#   Si se está tratando de cualquier otra preferencia que no sea el temperamento.
         elif new_value is not None:
             updated_preferences[preference] = new_value
 
@@ -75,9 +104,6 @@ def extract_preferences(message, expected_preference):
         Si la respuesta breve indica una cantidad mayor que cero para
         has_children, has_dogs o has_cats, interpreta que convive con ellos.
 
-        Para housing utiliza:
-        - APARTMENT: si vive en un piso
-        - HOUSE: si vive en una casa
 
         Para human_activity_level utiliza:
         - LOW: actividad baja, paseos tranquilos, poco ejercicio o poco tiempo para realizar actividad.
@@ -95,17 +121,26 @@ def extract_preferences(message, expected_preference):
         En preferred_temperament estarán temperamentos que indique el usuario
         que desee para su animal.
 
+        Para preferred_temperament:
+        - devuelve null si el usuario no proporciona información sobre las
+        características o temperamentos que desea para el perro.
+        - devuelve [] si el usuario indica explícitamente que no tiene ninguna
+        preferencia sobre el temperamento o carácter del perro.
+        - devuelve un array con los temperamentos correspondientes si el usuario
+        indica características que desea para el perro.
+
         No incluyas en preferred_temperament temperamentos que describan al
         usuario, a sus hijos, familiares u otros animales.
         
-        No deduzcas un temperamento por tener hijos, perros, gatos, 
-        por el tipo de vivienda ni por el nivel de actividad del usuario.
+        No deduzcas un temperamento por tener hijos, perros o gatos, ni a partir 
+        del nivel de actividad del usuario que puede ofrecer al perro.
     
         Por ejemplo:
         - "Soy una persona activa" -> preferred_temperament no incluye "Activo" porque
         está describiendo un rasgo del usuario y no del animal.
         - "Busco un perro activo" -> preferred_temperament incluye "Activo".
         - "Tengo hijos cariñosos" -> preferred_temperament no incluye "Cariñoso" porque está describiendo un rasgo de los hijos y no del animal.
+        - "No tengo ninguna preferencia sobre su carácter" -> preferred_temperament es [].
         """,
 
         input=message,
@@ -120,10 +155,6 @@ def extract_preferences(message, expected_preference):
                     "type": "object",
 
                     "properties": {
-                        "housing": {
-                            "type": ["string", "null"],
-                            "enum": ["APARTMENT", "HOUSE", None]
-                        },
 
                         "human_activity_level": {
                             "type": ["string", "null"],
@@ -143,7 +174,7 @@ def extract_preferences(message, expected_preference):
                         },
 
                         "preferred_temperament": {
-                            "type": "array",
+                            "type": ["array", "null"],
                             "items": {
                                 "type": "string",
                                 "enum": temperament_names
@@ -152,7 +183,6 @@ def extract_preferences(message, expected_preference):
                     },
 
                     "required": [
-                        "housing",
                         "human_activity_level",
                         "has_children",
                         "has_dogs",
@@ -171,7 +201,6 @@ def extract_preferences(message, expected_preference):
 
 # Cuestiones que va a realizar el chatbot para cada preferencia
 QUESTIONS = {
-    "housing": "¿Vives en un piso o en una casa?",
     "human_activity_level": (
         "¿Qué nivel de actividad puedes ofrecerle al perro? "
         "Por ejemplo, paseos tranquilos, paseos frecuentes "
@@ -180,6 +209,11 @@ QUESTIONS = {
     "has_children": "¿Hay niños viviendo contigo?",
     "has_dogs": "¿Convives actualmente con algún perro?",
     "has_cats": "¿Convives actualmente con algún gato?",
+    "preferred_temperament":  (
+        "¿Qué características te gustaría que tuviera el perro? "
+        "Por ejemplo, que sea tranquilo, cariñoso, sociable o juguetón. "
+        "Si no tienes ninguna preferencia, también puedes indicarlo."
+    ),
 }
 
 # create_empty_preferences: 
@@ -187,12 +221,11 @@ QUESTIONS = {
 #
 def create_empty_preferences():
     return {
-        "housing": None,
         "human_activity_level": None,
         "has_children": None,
         "has_dogs": None,
         "has_cats": None,
-        "preferred_temperament": [],
+        "preferred_temperament": None,
     }
 
 
@@ -203,11 +236,11 @@ def create_empty_preferences():
 # - Si devuelve el array con datos significa que FALTAN algunas preferencias del usuario
 def get_missing_preferences(preferences):
     required_preferences = [
-        "housing",
         "human_activity_level",
         "has_children",
         "has_dogs",
         "has_cats",
+        "preferred_temperament",
     ]
 
     # Almacena las preferencias que no ha comentado el usuario, es decir,
@@ -225,7 +258,6 @@ def get_missing_preferences(preferences):
 # get_next_question
 # Obtiene las preferencias del usuario que se desconocen y se realizan
 # las preguntas acerca de estas preferencias desconocidas para obtener información de estas.
-
 def get_next_question(preferences):
     # Obtiene el listado de preferencias del usuario que se desconocen
     missing_preferences = get_missing_preferences(preferences)
