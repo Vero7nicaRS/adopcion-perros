@@ -19,9 +19,10 @@ def get_activity_level(dog):
 
     return "UNKNOWN"
 
-# has_excluding_incompatibility: comprueba si existe alguna compatibilidad excluyente entre el perro y las especificaciones del usuario.
-# True: descarta al animal.
-# False: no descarta al animal.
+# has_excluding_incompatibility: comprueba si existe alguna compatibilidad excluyente 
+# entre el perro y las especificaciones del usuario.
+# - True: descarta al animal.
+# - False: no descarta al animal.
 def   has_excluding_incompatibility(dog, preferences):
     if (
         preferences["has_children"]
