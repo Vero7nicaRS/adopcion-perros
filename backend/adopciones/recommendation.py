@@ -82,7 +82,8 @@ def get_activity_compatibility(dog, human_activity_level):
 
 
 
-# def get_max_score(preferences): Indica cuál es la puntuación máxima que se puede conseguir
+# def get_max_score(preferences): Indica cuál es la puntuación máxima que puede conseguir 
+# el perro según las preferencias del usuario.
 #
 def get_max_score(preferences): 
     max_score = 1 # Incluye: Nivel de actividad
@@ -101,8 +102,8 @@ def get_max_score(preferences):
 
     return max_score
 
-# calculate_compatibility: define the compatibility score between dog and preferences
-# Indica la puntuación que puede conseguir el perro para ese usuario.
+# calculate_compatibility: calcula la puntuación de compatibilidad
+# entre el perro y las preferencias del usuario.
 #
 def calculate_compatibility(dog, preferences):
 
