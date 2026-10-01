@@ -98,7 +98,8 @@ def get_max_score(preferences):
         max_score += 1
 
     if preferences["preferred_temperament"]: 
-        max_score += 1 # Temperamento no suma siempre porque quizás el usuario no tenga preferencia por el temperamento del perro.
+        max_score += 1 # El Temperamento no suma siempre porque quizás el usuario 
+                    # no tenga preferencia por el temperamento del perro.
 
     return max_score
 
