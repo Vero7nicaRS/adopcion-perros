@@ -350,3 +350,113 @@ class DogAPITests(APITestCase):
         self.assertTrue(
             Dog.objects.filter(id=dog.id).exists()
         )
+
+
+    # Comprueba que no se puede crear un perro
+    # sin indicar al menos un temperamento.
+    def test_dog_cannot_be_created_without_temperament(self):
+
+        # Se crea un usuario administrador.
+        admin_user = User.objects.create_user(
+            username="admin_pruebas",
+            password="admin_pruebas",
+            is_staff=True
+        )
+
+        # Se autentica al usuario administrador.
+        self.client.force_authenticate(user=admin_user)
+
+        # Se crean los datos del perro sin ningún temperamento.
+        data = {
+            "name": "Perro de prueba",
+            "estimated_age": 3,
+            "estimated_age_unit": "YEARS",
+            "sex": "MALE",
+            "size": "MEDIUM",
+            "breed": "Mestizo",
+            "temperament_ids": [], # Vacío, no se indica ningún temperamento.
+            "description": "Perro creado durante una prueba.",
+            "dog_compatibility": "YES",
+            "cat_compatibility": "UNKNOWN",
+            "children_compatibility": "YES",
+            "has_special_needs": False,
+            "special_needs_description": "",
+            "is_sterilized": True,
+            "is_vaccinated": True,
+            "looking_for_home_since": "2026-01-01",
+            "adoption_status": "AVAILABLE"
+        }
+
+        response = self.client.post(
+            "/adopta_tu_canino/perros/",
+            data,
+            format="json"
+        )
+
+        # La API debe rechazar la petición porque no se indica al menos un temperamento.
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        # Se comprueba que el perro no se ha creado.
+        self.assertFalse(
+            Dog.objects.filter(name="Perro de prueba").exists()
+        )
+
+    # Comprueba que no se puede crear un perro
+    # sin indicar si tiene necesidades especiales.
+    def test_dog_cannot_be_created_without_has_special_needs(self):
+
+        # Se crea un usuario administrador.
+        admin_user = User.objects.create_user(
+            username="admin_pruebas",
+            password="admin_pruebas",
+            is_staff=True
+        )
+
+        # Se autentica al usuario administrador.
+        self.client.force_authenticate(user=admin_user)
+
+        # Se crea un temperamento.
+        temperament = Temperament.objects.create(
+            name="Activo"
+        )
+
+        # Se crean los datos del perro sin el campo
+        # has_special_needs.
+        data = {
+            "name": "Perro de prueba",
+            "estimated_age": 3,
+            "estimated_age_unit": "YEARS",
+            "sex": "MALE",
+            "size": "MEDIUM",
+            "breed": "Mestizo",
+            "temperament_ids": [temperament.id],
+            "description": "Perro creado durante una prueba.",
+            "dog_compatibility": "YES",
+            "cat_compatibility": "UNKNOWN",
+            "children_compatibility": "YES",
+            "special_needs_description": "", 
+            "is_sterilized": True,
+            "is_vaccinated": True,
+            "looking_for_home_since": "2026-01-01",
+            "adoption_status": "AVAILABLE"
+        }
+
+        response = self.client.post(
+            "/adopta_tu_canino/perros/",
+            data,
+            format="json"
+        )
+
+        # La API debe rechazar la petición porque no se indica si el perro tiene necesidades especiales.
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        # Se comprueba que el perro no se ha creado.
+        self.assertFalse(
+            Dog.objects.filter(name="Perro de prueba").exists()
+        )
