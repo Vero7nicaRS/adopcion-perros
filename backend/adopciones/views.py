@@ -106,6 +106,11 @@ class PhotographViewSet(viewsets.ModelViewSet):
     queryset = Photograph.objects.all().order_by('title') # Obtener la información
     serializer_class = PhotographSerializer 
     lookup_field = 'pk'
+    permission_classes = [IsAdminOrReadOnly] 
+
+#   Filtrar por "dog" y "is_main" en "query params"
+    filter_backends =[DjangoFilterBackend]
+    filterset_fields = ['dog', 'is_main']
 
 
 # --------------------------
@@ -115,6 +120,11 @@ class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all().order_by('title') # Obtener la información
     serializer_class = VideoSerializer 
     lookup_field = 'pk'
+    permission_classes = [IsAdminOrReadOnly] 
+
+#   Filtrar por "dog" en "query params"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['dog']
 
 
 # --------------------------------
