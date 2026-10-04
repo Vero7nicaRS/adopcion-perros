@@ -190,6 +190,7 @@ class DogSerializer(serializers.ModelSerializer):
         many=True, # Receive many PK
         queryset=Temperament.objects.all(), # These PK must be in Temperament.objects.all()
         write_only=True, # Write only 
+        allow_empty = False, # Do not allow empty list 
     )
 
 
@@ -214,6 +215,9 @@ class DogSerializer(serializers.ModelSerializer):
         allow_null = True, # Allow Null 
         required = False 
     )
+
+    has_special_needs = serializers.BooleanField(required=True) # Ensure that the field is required and must be provided in the request.
+    
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Dog # Modelo
         fields = ["id","name", "estimated_age", "estimated_age_unit", 
