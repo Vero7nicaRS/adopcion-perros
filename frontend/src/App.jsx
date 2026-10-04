@@ -18,6 +18,7 @@ import DogForm from './pages/DogForm.jsx';
 import ChatBotWidget from './components/ChatBotWidget.jsx';
 import DogTemperament from './pages/DogTemperament.jsx';
 import DogLocation from './pages/DogLocation.jsx';
+import ContactPage from './pages/ContactPage.jsx';
 
 function App() {
   return (
@@ -84,6 +85,7 @@ function App() {
               } 
           />
 
+          <Route path ="/contacto"element={<ContactPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register /> } />
           <Route path='*' element={<p>404: Página no encontrada</p>} />
