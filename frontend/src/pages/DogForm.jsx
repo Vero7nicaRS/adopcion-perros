@@ -53,7 +53,61 @@ function DogForm() {
     const [location, setLocation] = useState("");
     const [locations, setLocations] = useState([]);
     const [adoptionStatus, setAdoptionStatus] = useState("");
-    const [mainPhotograph, setMainPhotograph] = useState("");
+
+    // Photographs
+    const [mainPhotographFile, setMainPhotographFile] = useState(""); // Fotografía principal nueva
+    //const [photographFiles, setPhotographFiles] = useState(""); // Fotografías secundarias nuevas
+    const [photographs, setPhotographs] = useState([]);  // Todas las fotografías existentes
+
+    // Preview de la fotografía principal mostrada
+    const [mainPhotographPreview, setMainPhotographPreview] = useState(null);
+    // Preview de las fotografías secundarias mostradas
+    const [secondaryPhotographPreviews, setSecundaryPhotographPreviews] = useState([]);
+
+    // Fotografías nuevas todavía no guardadas
+    const [newSecondaryPhotographs, setNewSecondaryPhotographs] = useState([]); 
+
+    // IDs de fotografías existentes que queremos borrar
+    const [photographsToDelete, setPhotographsToDelete] = useState([]);
+
+    // Obtiene la fotografía principal
+    const currentMainPhotograph = photographs.find(
+        (photo) => photo.is_main // Se obtiene 1 foto (find).
+    );
+    
+    const currentSecondaryPhotographs = photographs.filter(
+        (photo) => !photo.is_main // Se obtienen varias fotos (filter).
+    );
+
+    // Indica si hay una fotografía principal, ya sea que existiera anteriormente 
+    // o que el usuario ha seleccionado una nueva para añadir.
+    const hasMainPhotograph =
+        Boolean(currentMainPhotograph) ||
+        Boolean(mainPhotographFile);
+
+    // Indica de las fotografías secundarias que existían cuantas se han borrado.
+    const remainingSecondaryPhotographs =
+        currentSecondaryPhotographs.length
+        - photographsToDelete.length;    
+
+    // Total de fotografías secundarias que hay.
+    const totalPhotographs =
+        (hasMainPhotograph ? 1 : 0)
+        + remainingSecondaryPhotographs
+        + newSecondaryPhotographs.length;
+
+    // Huecos disponibles para añadir fotografías secundarias.
+    const availablePhotographSlots = 5 - totalPhotographs;
+    
+    // Eliminar vídeo principal.
+    const [deleteMainPhotograph, setDeleteMainPhotograph] = useState(false);
+    // Videos
+    const [videos, setVideos] = useState([]); // Vídeos existentes (debe haber 1 o 0).
+    const [videoFile, setVideoFile] = useState(null);
+    const [videoPreview, setVideoPreview] = useState(null); // Preview del vídeo mostrado.
+    const currentVideo = videos[0]; // Vídeo actual.
+    const [deleteVideo, setDeleteVideo] = useState(false); // Eliminar vídeo.
+
 
     const [temperaments, setTemperaments] = useState([]);
     const [selectedTemperaments, setSelectedTemperaments] = useState([]);
@@ -72,13 +126,76 @@ function DogForm() {
     const [dogCompatibilityError, setDogCompatibilityError] = useState("");
     const [catCompatibilityError, setCatCompatibilityError] = useState("");
     const [childrenCompatibilityError, setChildrenCompatibilityError] = useState("");
+    const [photographError, setPhotographError] = useState("");
 
-    // Estado relacionados con el envío del formulario de Inicio de sesión.
+    // Estados relacionados con el envío del formulario de Inicio de sesión.
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);    
 
+    const handleDeleteMainPhotograph  = () => {
+        setDeleteMainPhotograph(true);
+    }
 
-    
+    const handleCancelNewMainPhotograph = () => {
+        if (mainPhotographPreview) {
+            URL.revokeObjectURL(mainPhotographPreview);
+        }
+
+        setMainPhotographFile(null);
+        setMainPhotographPreview(null);
+    };
+
+
+    const handleDeleteVideo = () => {
+        setDeleteVideo(true);
+    };
+
+    const handleCancelNewVideo = () => {
+        if (videoPreview) {
+            URL.revokeObjectURL(videoPreview);
+        }
+        setVideoFile(null);
+        setVideoPreview(null);
+    };
+
+    const handleDeleteNewPhotograph = (photoId) => {
+        setPhotographError("");
+        setNewSecondaryPhotographs((current) =>
+            current.filter((photo) => photo.id !== photoId)
+        );
+        
+    };
+
+    const handleDeleteExistingPhotograph = (photoId) => {
+        setPhotographsToDelete((current) => [
+            ...current,
+            photoId
+        ]);
+    };
+
+    const handleSecondaryPhotographsChange = (e) => {
+        setPhotographError("");
+        const files = Array.from(e.target.files);
+        const filesToAdd = files.slice(0, availablePhotographSlots);
+        if (files.length > availablePhotographSlots) {
+            setPhotographError(
+                `Solo se han añadido ${availablePhotographSlots} fotografía(s), ya que el máximo total es 5.`
+            );
+        }
+        const newFiles = filesToAdd.map((file) => ({
+            id: crypto.randomUUID(),
+            file: file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        setNewSecondaryPhotographs((current) => [
+            ...current,
+            ...newFiles
+        ]);
+        e.target.value = "";
+    };
+
+
     // Handlers de los campos del formulario
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -202,8 +319,7 @@ function DogForm() {
 
     //  Handler del submit
     const handleSubmit = async (e) => {
-        e.preventDefault(); // ← IMPORTANTE: evitar recarga de página
-        
+        e.preventDefault(); // IMPORTANTE: evitar recarga de página
         setSubmitError(null);
 
         setNameError("");
@@ -231,7 +347,6 @@ function DogForm() {
             );
             hasError = true;
         }
-
         if (!childrenCompatibility) {
             setChildrenCompatibilityError(
                 "Debes seleccionar la compatibilidad del perro."
@@ -255,8 +370,7 @@ function DogForm() {
                 "Debes seleccionar al menos un temperamento."
             );
             hasError = true;
-        }
-        
+        }    
         if (estimatedAge && !estimatedAgeUnit) {
             setEstimatedAgeUnitError(
                 "Debes seleccionar la unidad de la edad."
@@ -265,6 +379,9 @@ function DogForm() {
         }
 
         if (hasError) {
+            setSubmitError(
+                "No se ha podido guardar el perro. Revisa los campos indicados."
+            );
             return;
         }
 
@@ -312,17 +429,179 @@ function DogForm() {
                 body: JSON.stringify (dogData)
             });
 
-          const data = await response.json();
-           if (!response.ok){
+            const data = await response.json();
+            if (!response.ok){
                 throw new Error(
                 data.detail || "No se pudieron guardar los cambios"
-                
               );
             }
+        
+            let dogId;
+        // Si es un perro nuevo, se obtiene el identificador que se acaba de crear.
+        // Si es un perro editado, se obtiene el id pasado por parámetro.
+            if(!isEditing){
+                dogId = data.id;
+            }else{
+                dogId = id;
+            }
 
-          console.log("Perro actualizado:", data);
-          setName("");
-          navigate("/admin/dogs");
+            // FOTOGRAFÍA PRINCIPAL
+            if (mainPhotographFile) {
+                console.log("MAIN P:" , currentMainPhotograph);
+                const requestPhotosUrl  = currentMainPhotograph
+                    ? `${API_BASE_URL}/adopta_tu_canino/fotografias/${currentMainPhotograph.id}/` // Editar (visualizar datos del perro)
+                    : `${API_BASE_URL}/adopta_tu_canino/fotografias/`;      // Agregar
+
+                const photoRequestMethod  = currentMainPhotograph ? "PATCH" : "POST";
+                console.log("Metodo: ",photoRequestMethod );
+                const formData = new FormData();
+
+                formData.append("dog", dogId);
+                formData.append("imagen", mainPhotographFile);
+                formData.append("is_main", true);
+                formData.append("title", "probando");
+                formData.append("description", "");
+
+                const photoResponse = await fetch(
+                    requestPhotosUrl,
+                    {
+                        method: photoRequestMethod ,
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        body: formData
+                    }
+                );
+
+                const photoData = await photoResponse.json();
+                console.log("Respuesta fotografía:", photoData);
+                if (!photoResponse.ok) {
+                    throw new Error(
+                        photoData.detail ||
+                        "No se pudo guardar la fotografía principal"
+                    );
+                }
+            }else if (deleteMainPhotograph && currentMainPhotograph) {
+                const response = await fetch(
+                    `${API_BASE_URL}/adopta_tu_canino/fotografias/${currentMainPhotograph.id}/`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudo eliminar la fotografía principal"
+                    );
+                }
+            }
+
+            // Eliminar fotografías antiguas
+            for (const photographId of photographsToDelete) {
+                const response = await fetch(
+                    `${API_BASE_URL}/adopta_tu_canino/fotografias/${photographId}/`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "No se pudieron eliminar todas las fotografías"
+                );
+                }
+            }
+
+            // Guardar fotografías secundarias nuevas
+            for (const photograph of newSecondaryPhotographs) {
+                const formData = new FormData();
+
+                formData.append("dog", dogId);
+                formData.append("imagen", photograph.file);
+                formData.append("is_main", false);
+                formData.append("title", "Fotografía adicional");
+                formData.append("description", "");
+
+                const response = await fetch(
+                    `${API_BASE_URL}/adopta_tu_canino/fotografias/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        body: formData
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudieron guardar todas las fotografías"
+                    );
+                }
+            }
+
+            // VIDEO
+            if (videoFile) {
+                const formVideoData = new FormData();
+
+                formVideoData.append("dog", dogId);
+                formVideoData.append("file", videoFile);
+                formVideoData.append("title", "Vídeo");
+                formVideoData.append("description", "");
+
+                const requestVideoUrl = currentVideo
+                    ? `${API_BASE_URL}/adopta_tu_canino/videos/${currentVideo.id}/`
+                    : `${API_BASE_URL}/adopta_tu_canino/videos/`;
+
+                const videoRequestMethod = currentVideo
+                    ? "PATCH"
+                    : "POST";
+
+                const videoResponse = await fetch(
+                    requestVideoUrl,
+                    {
+                        method: videoRequestMethod,
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        body: formVideoData
+                    }
+                );
+                const videoData = await videoResponse.json();
+
+                if (!videoResponse.ok) {
+                    throw new Error(
+                        videoData.detail ||
+                        "No se pudo guardar el vídeo"
+                    );
+                }
+            } else if (deleteVideo && currentVideo) {
+                const response = await fetch(
+                    `${API_BASE_URL}/adopta_tu_canino/videos/${currentVideo.id}/`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No se pudo eliminar el vídeo"
+                    );
+                }
+            }
+
+            console.log("Perro actualizado:", data);
+            setName("");
+            navigate("/admin/dogs");
 
         } catch (err) {
           if (isEditing) console.error("❌ Error al actualizar el perro:", err);
@@ -395,6 +674,39 @@ function DogForm() {
                     }
                     dogFormResult = await dogResponse.json();
                     setDogForm(dogFormResult);
+
+                    // Se obtienen la fotografía principal y las secundarias asociadas al perro.
+                    const photoResponse = await fetch(
+                        `${API_BASE_URL}/adopta_tu_canino/fotografias/?dog=${id}`
+                    );
+
+                    if (!photoResponse.ok) {
+                        throw new Error(
+                            "No se pudieron obtener las fotografías"
+                        );
+                    }
+
+                    const photoResult = await photoResponse.json();
+
+                    console.log("Respuesta fotografía:", photoResult);
+                    setPhotographs(photoResult);
+
+
+                    // Se obtiene vídeo asociado al perro.
+                        const videoResponse = await fetch(
+                        `${API_BASE_URL}/adopta_tu_canino/videos/?dog=${id}`
+                    );
+
+                    if (!videoResponse.ok) {
+                        throw new Error(
+                            "No se pudo obtener el vídeo"
+                        );
+                    }
+
+                    const videoResult = await videoResponse.json();
+
+                    console.log("Respuesta vídeo:", videoResult);
+                    setVideos(videoResult);          
                 }
 
                 if(dogFormResult){
@@ -467,6 +779,25 @@ function DogForm() {
                 controller.abort();
             };
     }, [id, isEditing]);
+
+    /* Limpiar URLs de fotografías */
+    useEffect(() => {
+        return () => {
+            if (mainPhotographPreview) {
+                URL.revokeObjectURL(mainPhotographPreview);
+            }
+        };
+    }, [mainPhotographPreview]);
+
+    /* Limpiar URLs de vídeos */
+    useEffect(() => {
+        return () => {
+            if (videoPreview) {
+                URL.revokeObjectURL(videoPreview);
+            }
+        };
+    }, [videoPreview]);
+
     /* Renderizados condicionales:
         - Loading.
         - Error.
@@ -491,7 +822,7 @@ function DogForm() {
                 <div className="dog-form">
                   <form onSubmit={handleSubmit}>
                     {/* Estado de adopción */}
-                        <div>
+                        <div className="dog-form-field">
                             <label
                                 htmlFor="adoptionStatus"
                                 className="dog-form-label"
@@ -516,15 +847,14 @@ function DogForm() {
                                     </option>
                                 ))}
                             </select>
-                            
-                        </div>
                             {adoptionStatusError  && (
                                 <p className="dog-form-field-error">
                                     {adoptionStatusError }
                                 </p>
                             )}
+                        </div>            
 
-                        <div>
+                        <div className="dog-form-field">
                             <label
                                 htmlFor="location"
                                 className="dog-form-label"
@@ -910,7 +1240,218 @@ function DogForm() {
                         </div>
                     </fieldset>
 
-            
+                    {/* FOTOGRAFÍA PRINCIPAL */}
+                    <div className="dog-form-photo-container">
+                        <label
+                            htmlFor="main-photograph"
+                            className="dog-form-label"
+                        >
+                           {currentMainPhotograph
+                                ? "Cambiar fotografía principal"
+                                : "Añadir fotografía principal"
+                            }
+                        </label>
+
+                        
+                            {/* Muestra la previsualización de la foto principal */}
+                            {(mainPhotographPreview ||
+                                (!deleteMainPhotograph && currentMainPhotograph)) && (
+                                <img
+                                    src={
+                                        mainPhotographPreview ||
+                                        currentMainPhotograph.imagen
+                                    }
+                                    alt="Fotografía principal"
+                                    className="dog-form-photograph"
+                                />
+                            )}
+
+                            <input
+                                id="main-photograph"
+                                type="file"
+                                className="dog-form-file-input"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    /* Al seleccionar una nueva foto no se dispone de una URL
+                                    todavía ya que no se ha añadido la foto en el sistema.
+                                    Por tanto, se crea una URL temporal para poder visualizarla. */
+                                    const file = e.target.files[0];
+                                    setMainPhotographFile(file);
+                                    if (file) {
+                                        setMainPhotographPreview(
+                                            URL.createObjectURL(file)
+                                        );
+                                    }
+                                }  
+                                }
+                            />
+                            <div className="dog-form-photo-buttons">
+                                {currentMainPhotograph && !deleteMainPhotograph && (
+                                    <button
+                                        type="button"
+                                        className= "dog-form-delete-button"
+                                        onClick={handleDeleteMainPhotograph}
+                                    >
+                                        Eliminar fotografía principal
+                                    </button>
+                                )}
+                                {mainPhotographFile && (
+                                    <button
+                                        type="button"
+                                        className= "dog-form-cancel-button"
+                                        onClick={handleCancelNewMainPhotograph}
+                                    >
+                                        Cancelar cambio
+                                    </button>
+                                )}
+                            </div>
+                    </div>
+
+                    {/* FOTOGRAFÍAS SECUNDARIAS */}
+                    <div className="dog-form-secondary-photographs-container">
+                        <label
+                            htmlFor="photographs"
+                            className="dog-form-label"
+                        >
+                            Fotografías adicionales
+                        </label>
+
+                        <div className="dog-form-secondary-photographs">
+                            {currentSecondaryPhotographs
+                                .filter(
+                                    (photo) =>
+                                        !photographsToDelete.includes(photo.id)
+                                )
+                                .map((photo) => (
+                                    <div key={photo.id}
+                                        className ="dog-form-photo-container">
+                                        <img
+                                            src={photo.imagen}
+                                            alt={photo.title}
+                                            className="dog-form-photograph"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            className= "dog-form-delete-button"
+                                            onClick={() =>
+                                                handleDeleteExistingPhotograph(photo.id)
+                                            }
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                ))
+                            }
+
+                            {newSecondaryPhotographs.map((photo) => (
+                                <div key={photo.id}
+                                    className ="dog-form-photo-container"
+                                    >
+                                    <img
+                                        src={photo.preview}
+                                        alt="Nueva fotografía"
+                                        className="dog-form-photograph"
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className= "dog-form-delete-button"
+                                        onClick={() =>
+                                            handleDeleteNewPhotograph(photo.id)
+                                        }
+                                    >
+                                        Eliminar
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        <input
+                            id="photographs"
+                            type="file"
+                            accept="image/*"
+                            className="dog-form-file-input"
+                            multiple
+                            onChange={handleSecondaryPhotographsChange}
+                            
+                        />
+                        {photographError && (
+                            <p className="error-message">
+                                {photographError}
+                            </p>
+                        )}
+                        <p> Puedes añadir {availablePhotographSlots} fotografía(s) más. </p>
+
+                    </div>
+
+                    {/* VÍDEOS */}
+                    <div className="dog-form-video-container">
+                        <label
+                            htmlFor="main-video"
+                            className="dog-form-label"
+                        >
+                           {currentVideo
+                                ? "Cambiar vídeo"
+                                : "Añadir vídeo"
+                            }
+                        </label>
+
+                            {/* Muestra la previsualización del vídeo */}
+                            {(videoPreview || (!deleteVideo && currentVideo)) && (
+                                <video
+                                    controls
+                                    src={
+                                        videoPreview ||
+                                        currentVideo.file
+                                    }
+                                    className="dog-form-video"
+                                />
+                            )}
+
+                            <input
+                                id="main-video"
+                                type="file"
+                                className="dog-form-file-input"
+                                accept="video/*"
+                                onChange={(e) => {
+                                    /* Al seleccionar un nuevo vídeo no se dispone de una URL
+                                        todavía ya que no se ha añadido el vídeo en el sistema.
+                                        Por tanto, se crea una URL temporal para poder visualizarla. */
+                                    const file = e.target.files[0];
+                                    setVideoFile(file);
+                                    if (file) {
+                                        setVideoPreview(
+                                            URL.createObjectURL(file)
+                                        );
+                                    }
+                                    }  
+                                }
+                            />
+
+                            <div className="dog-form-video-buttons">
+                                {currentVideo && !deleteVideo && (
+                                    <button
+                                        type="button"
+                                        className= "dog-form-delete-button"
+                                        onClick={handleDeleteVideo}
+                                    >
+                                        Eliminar vídeo
+                                    </button>
+                                )}
+
+                                {videoFile && (
+                                    <button
+                                        type="button"
+                                        className= "dog-form-cancel-button"
+                                        onClick={handleCancelNewVideo}
+                                    >
+                                        Cancelar cambio
+                                    </button>
+                                )}  
+                            </div>
+                        </div>
+
                     <button
                       type="submit"
                       disabled={submitting}
