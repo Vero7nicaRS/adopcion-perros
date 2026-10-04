@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import './App.css'
@@ -17,6 +16,8 @@ import AdoptionApplicationsPanel from './pages/AdoptionApplicationsPanel.jsx';
 import AdminDogList from './pages/AdminDogList.jsx';
 import DogForm from './pages/DogForm.jsx';
 import ChatBotWidget from './components/ChatBotWidget.jsx';
+import DogTemperament from './pages/DogTemperament.jsx';
+import DogLocation from './pages/DogLocation.jsx';
 
 function App() {
   return (
@@ -44,7 +45,6 @@ function App() {
                   </ProtectedRoute>
                 }
           />
-
           <Route path="/admin/dogs" 
                 element ={
                   <AdminRoute>
@@ -68,7 +68,22 @@ function App() {
                 </AdminRoute>
               } />
 
-          
+          <Route path= "/admin/temperament/add"
+            element ={
+                <AdminRoute>
+                  <DogTemperament />
+                </AdminRoute>
+              } 
+          />
+
+          <Route path= "/admin/location/add"
+            element ={
+                <AdminRoute>
+                  <DogLocation />
+                </AdminRoute>
+              } 
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register /> } />
           <Route path='*' element={<p>404: Página no encontrada</p>} />

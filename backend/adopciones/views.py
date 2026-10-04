@@ -1,5 +1,6 @@
 from django.db.migrations import serializer
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 from rest_framework import viewsets, status
@@ -13,6 +14,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
+from .permissions import IsAdminOrReadOnly
 from .chatbot import ( create_empty_preferences, extract_preferences, 
                       update_preferences, get_missing_preferences,
                       get_missing_preferences, get_next_question
@@ -58,6 +60,12 @@ class TemperamentViewSet(viewsets.ModelViewSet):
     queryset = Temperament.objects.all().order_by('name') # Obtener la información
     serializer_class = TemperamentSerializer 
     lookup_field = 'pk'
+    permission_classes = [IsAdminOrReadOnly] # Solo los administradores pueden crear, actualizar o eliminar perros.
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "No se permite eliminar temperamentos."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
 
 # --------------------------
@@ -67,6 +75,13 @@ class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all().order_by('name') # Obtener la información
     serializer_class = LocationSerializer 
     lookup_field = 'pk'
+    permission_classes = [IsAdminOrReadOnly] # Solo los administradores pueden crear, actualizar o eliminar perros.
+    
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "No se permite eliminar ubicaciones."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
 
 # --------------------------

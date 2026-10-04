@@ -71,7 +71,17 @@ class TemperamentSerializer(serializers.ModelSerializer):
     def validate_name(self,value): # Se asegura que el campo "name" tenga valor
         if(not value or not value.strip()):
             raise serializers.ValidationError("El campo 'name' es obligatorio.")
-        return value
+        name = value.strip().capitalize() # Capitaliza el nombre (Ej: noBle -> Noble)
+        # Se asegura que el campo "name" no tenga valores duplicados.
+        # Por tanto, se comprueba que no exista el mismo temperamento 
+        # independientemente de las mayúsculas y minúsculas.
+        if Temperament.objects.filter(name__iexact=name).exists():
+            raise serializers.ValidationError( 
+                # Si existe un temperamento cuyo nombre sea igual, 
+                # independientemente de las mayúsculas/minúsculas, lanza el error.
+                "Ya existe un temperamento con este nombre."
+            )
+        return name
 
 # --------------------------
 #     LOCATION SERIALIZER

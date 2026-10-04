@@ -1,0 +1,89 @@
+.dogtemperament-form-container{
+    min-height: calc(100vh - var(--altura-navbar));
+    margin-top: var(--altura-navbar);
+    padding: 30px;
+}
+
+/* HEADER */
+.dogtemperament-form-header{
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+
+/* FORM */
+.dogtemperament-form{
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+/* USERNAME TEXT */
+.dogtemperament-form-name-text{
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+/* LABEL */
+.dogtemperament-form-label, .dogtemperament-form-legend{
+     display: block;
+     margin-bottom: 4px;
+     font-weight: bold;
+     font-size: 1rem;
+}
+
+/* ERROR */
+.dogtemperament-form-field-error {
+    margin-top: 5px;
+    margin-bottom: 0;
+
+    color: #a61b29;
+    font-size: 0.9rem;
+}
+
+
+/* BUTTON */
+.dogtemperament-form-save-button{
+    width: 100%;
+    padding: 2%;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--pink-colour);
+    color: white;
+    font-weight: 600;
+}
+
+.dogtemperament-form-save-button:hover{
+    background-color: var(--pink-colour-hover);
+}
+
+.dogtemperament-temperament {
+    padding: 5px;
+    background-color: var(--pink-colour);
+    border-radius: 10px;
+    color: white;
+}
+
+.dogtemperament-existing {
+    width: 100%;
+    max-width: 750px;
+    margin: 30px auto 0;
+}
+
+.dogtemperament-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dogtemperament-form-field {
+    margin-bottom: 15px;
+}
