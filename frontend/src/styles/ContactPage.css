@@ -1,0 +1,63 @@
+.contact-container {
+    min-height: calc(100vh - var(--altura-navbar));
+    margin-top: var(--altura-navbar);
+    padding: 30px;
+}
+
+/* HEADER */
+.contact-header {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* TEXT - HEADER */
+.contact-text {
+    max-width: 650px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+
+/* CONTACT CARD */
+.contact-card {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    text-align: center;
+
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+}
+
+/* CARD TITLE */
+.contact-card-title {
+    margin-bottom: 1rem;
+    color: var(--pink-colour);
+    font-size: 1.25rem;
+}
+
+/* CARD TEXT */
+.contact-card-text {
+    margin-bottom: 0;
+}
+
+.contact-card-icon {
+    display: block;
+    margin-bottom: 1rem;
+
+    color: var(--pink-colour);
+    font-size: 2rem;
+}
+
+/* EMAIL LINK */
+.contact-email {
+    color: var(--pink-colour-hover);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.contact-email:hover {
+    text-decoration: underline;
+}
