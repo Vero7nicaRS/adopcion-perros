@@ -181,9 +181,10 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
         dog.adoption_status = Dog.AdoptionStatusChoices.ADOPTED 
         dog.save(update_fields = ["adoption_status"])  # Guarda cambios: actualiza el campo "adoption_status"
 
-        # Reject others adoptionApplication about this dog 
+        # Reject others PENDING adoptionApplication about this dog 
         AdoptionApplication.objects.filter(
-            dog = dog
+            dog = dog,
+            status = AdoptionApplication.ApplicationStatus.PENDING
         ).exclude(
             pk = adoption_application.pk
         ).update( 
@@ -242,6 +243,12 @@ class AdoptionApplicationViewSet(viewsets.ModelViewSet):
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "No se permite eliminar las solicitudes de adopción."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
 
 # --------------------------------
 #          CHATBOT API VIEW
@@ -269,12 +276,11 @@ def chatbot(request):
 
     # 2. Crea el esqueleto de las preferencias del usuario vacío.
     # {
-    #    "housing": None,
     #    "human_activity_level": None,
     #    "has_children": None,
     #    "has_dogs": None,
     #    "has_cats": None,
-    #    "preferred_temperament": [],
+    #    "preferred_temperament": None,
     # }
     if current_preferences is None:
         current_preferences = create_empty_preferences()
@@ -330,7 +336,6 @@ def chatbot(request):
     #       'score': 4, 
     #       'max_score': 5, 
     #       'activity_compatibility': 'GOOD', 
-    #       'housing_compatibility': 'GOOD', 
     #       'children_evaluation': 'UNKNOWN', 
     #       .................
     #    }
