@@ -137,6 +137,19 @@ class PhotographSerializer(serializers.ModelSerializer):
         fields = ["id", "dog", "imagen", "title", "description", "created_at", "is_main"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
         read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
 
+    # --- Validaciones generales --- 
+    def validate(self, data):
+        dog = data.get("dog")
+
+        # Si se está creando una nueva fotografía (self.instance is None) y ya existen 5 fotografías para ese perro, se lanza un error.
+        if self.instance is None and dog:
+            # Solo se permiten 5 fotografías por perro. Si se intenta agregar una sexta, se lanza un error.
+            if dog and Photograph.objects.filter(dog=dog).count() >= 5:
+                raise serializers.ValidationError(
+                    "Un perro no puede tener más de 5 fotografías."
+                )
+
+        return data
 
 # --------------------------
 #   VIDEO SERIALIZER
@@ -144,9 +157,22 @@ class PhotographSerializer(serializers.ModelSerializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta: # Se definen las características del Serializer, indicando "MODELO" y "CAMPOS" del Serializer.
         model = Video # Modelo
-        fields = ["id", "dog", "file", "title", "description", "description", "created_at"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
+        fields = ["id", "dog", "file", "title", "description", "created_at"] # Atributos que estarán en la petición (A la hora de hacer peticiones, esta información es la que se va a mostrar.)
         read_only_fields = ["id" , "created_at"] # El usuario no puede modificarlas.
 
+    # --- Validaciones generales --- 
+    def validate(self, data):
+        dog = data.get("dog")
+
+        # Si se está creando un nuevo vídeo (self.instance is None) y ya existe 1 vídeo para ese perro, se lanza un error.
+        if self.instance is None and dog:
+            # Solo se permiten 1 vídeo por perro. Si se intenta agregar un segundo vídeo, se lanza un error.
+            if dog and Video.objects.filter(dog=dog).count() >= 1:
+                raise serializers.ValidationError(
+                    "Un perro solo puede tener un vídeo."
+                )
+
+        return data
 
     
 # --------------------------
