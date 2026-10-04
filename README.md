@@ -10,32 +10,25 @@ Aplicación web desarrollada como Trabajo Fin de Máster (TFM) cuyo objetivo es 
 
 La aplicación permite consultar la información de los perros disponibles para adopción, incluyendo datos como su edad, raza, tamaño, carácter, compatibilidad con otros animales, necesidades especiales, fotografías y vídeos.
 
-Los usuarios podrán registrarse, iniciar sesión y enviar solicitudes de adopción para los perros disponibles. Por otra parte, los usuarios autorizados podrán gestionar la información de los animales y gestionar las solicitudes recibidas, pudiendo rechazarlas o aceptarlas.
+Los usuarios pueden registrarse, iniciar sesión y enviar solicitudes de adopción para los perros disponibles. Por otra parte, los usuarios autorizados pueden gestionar la información de los animales y las solicitudes recibidas, pudiendo rechazarlas o aceptarlas.
 
-Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios en la búsqueda de un perro compatible con su estilo de vida y preferencias. A través de una conversación en lenguaje natural, el chatbot recopia información del usuario y proporciona recomendaciones utilizando un sistema de reglas de negocio.
+Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios en la búsqueda de un perro compatible con su estilo de vida y preferencias. A través de una conversación en lenguaje natural, el chatbot recopila e interpreta las preferencias del usuario y proporciona recomendaciones utilizando un sistema de reglas de negocio.
 
 ## 🆗 Funcionalidades implementadas
 
 - Visualización del listado de perros disponibles para adopción.
 - Visualización de la información de cada perro.
 - Filtrado de perros según sus características.
-- Gestión de perros mediante una API REST.
 - Gestión de fotografías y vídeos asociados a los perros.
 - Creación y consulta de solicitudes de adopción.
 - Aceptación y rechazo de solicitudes mediante endpoints específicos.
 - Actualización automática del estado de adopción de un perro cuando una solicitud es aceptada.
 - Registro e inicio de sesión de usuarios.
 - Autenticación mediante JSON Web Token (JWT).
-- Gestión de perros y solicitudes por usuarios autorizados.
+- Gestión de perros y solicitudes de adopción por usuarios administradores.
 - Recomendaciones de adopción mediante un chatbot.
-
-## 👷🏽‍♀️ Funcionalidades previstas
-
-- Actualización de la gestión de perros.
-- Gestionar las fotografías y vídeos asociado a los perros.
-- Gestionar la ubicación asociada a los perros.
-- Filtrado de información mediante parámetros de consulta.
-- Migración de la base de datos de SQLite a MySQL.
+- Gestión de las ubicaciones asociadas a los perros.
+- Gestión de los temperamentos asociados a los perros.
 
 ## 👩🏼‍💻 Tecnologías utilizadas 
 ### Backend
@@ -45,6 +38,7 @@ Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios e
 - SQLite para desarrollo local
 - API de OpenAI
 - JWT
+- PostgreSQL para producción
 
 ### Frontend
 - React
@@ -52,10 +46,10 @@ Además, la aplicación incorpora un chatbot orientado a ayudar a los usuarios e
 - React Router
 - React Bootstrap
 - CSS
-- Boostrap Icons
+- Bootstrap Icons
 
-### Tecnologías previstas
-- MySQL
+### Despliegue
+- Railway
 
 ## 📁 Estructura del proyecto
 ```text
@@ -70,7 +64,7 @@ dog_adoption/
 
 ### Arquitectura del proyecto
 La aplicación está estructurada en dos partes principales:
-- **Backend**: desarrollado con Django. Se encarga de la lógica de negocio, el acceso a la base de datos, la autenticación y la exposición con la API REST.
+- **Backend**: desarrollado con Django. Se encarga de la lógica de negocio, el acceso a la base de datos, la autenticación y la exposición de la API REST.
 - **Frontend**: desarrollado con React y Vite. Se encarga de la interfaz de usuario y la comunicación con la API del backend.
 
 Gracias a esta separación, se permite distribuir las responsabilidades de la aplicación y facilitar su mantenimiento y evolución.
@@ -147,7 +141,7 @@ http://localhost:5173/
 ```
 
 ## Endpoints desarrollados
-Los siguientes endpoints son orientativos y se actualizarán conforme avance el desarrollo de la aplicación.
+Los principales endpoints desarrollados en la aplicación son:
 
 ### Autenticación
 
@@ -162,29 +156,30 @@ Los siguientes endpoints son orientativos y se actualizarán conforme avance el 
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /adopta_tu_canino/perros | Obtener todos los perros |
+| GET | /adopta_tu_canino/perros/ | Obtener todos los perros |
 | GET | /adopta_tu_canino/perros/:id | Obtener un perro en concreto |
-| POST | /adopta_tu_canino/perros | Crear un perro |
+| POST | /adopta_tu_canino/perros/ | Crear un perro |
 | PUT | /adopta_tu_canino/perros/:id | Modificar un perro |
 | PATCH | /adopta_tu_canino/perros/:id | Modificación parcial de un perro  |
+
+Los perros no pueden eliminarse directamente de la aplicación, permitiendo conservar su información e historial.
 
 ### Solicitudes de adopción
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /adopta_tu_canino/solicitud-adopcion/ | Obtener todas las solicitudes |
-| GET | /adopta_tu_canino/solicitud-adopcion/:id | Obtener una solicitud concreta |
+| GET | /adopta_tu_canino/solicitud-adopcion/ | Obtener las solicitudes propias o todas las solicitudes para usuarios administradores |
+| GET | /adopta_tu_canino/solicitud-adopcion/:id/ | Obtener una solicitud concreta |
 | POST | /adopta_tu_canino/solicitud-adopcion/ | Crear una solicitud de adopción |
 | PATCH | /adopta_tu_canino/solicitud-adopcion/:id/accept_status/ | Aceptar una solicitud pendiente |
 | PATCH | /adopta_tu_canino/solicitud-adopcion/:id/reject_status/ | Rechazar una solicitud pendiente |
-| DELETE | /adopta_tu_canino/solicitud-adopcion/:id | Eliminar una solicitud |
 
-Las solicitudes de adopción no pueden modificarse directamente mediante los métodos PUT o PATCH una vez enviadas. Los cambios de estado se realizan mediante los endpoints específicos de aceptación y rechazo
+Las solicitudes de adopción no pueden modificarse ni eliminarse directamente una vez enviadas. Los cambios de estado se realizan mediante los endpoints específicos de aceptación y rechazo.
 
 ### Chatbot
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| POST | `/adopta_tu_canino/chatbot/` | Enviar información al chatbot y obtener una respuesta o recomendaciones |
+| POST | `/adopta_tu_canino/chatbot/` | Enviar las preferencias del usuario y obtener una respuesta o recomendaciones de perros |
 
 **NOTA**: La API dispone además de endpoints auxiliares para la gestión de usuarios, ubicaciones, temperamentos, fotografías y vídeos. Algunos de ellos se utilizan internamente por las funcionalidades de gestión de la aplicación.
 
@@ -195,9 +190,9 @@ Por motivos de tamaño, este repositorio no incluye la carpeta `backend/media/`,
 
 ## Estado del proyecto
 
-🚧 En desarrollo.
+✅ En producción. 
 
-El proyecto se encuentra en fase de desarrollo y actualmente dispone de las principales funcionalidades previstas para el proceso de adopción, incluyendo la gestión de usuarios, perros y solicitudes de adopción, así como el sistema de recomendación mediante chatbot.
+El proyecto se encuentra desplegado y dispone de las principales funcionalidades previstas. Asimismo, se podrán incorporar nuevas funcionalidades y mejoras en futuras versiones de la aplicación.
 
 ## 👩🏽‍💻 Autor
 
