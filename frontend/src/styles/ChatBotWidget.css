@@ -1,10 +1,13 @@
-.chatbot-container{
+.chatbot-container {
     position: fixed;
     right: 30px;
+    
+    /* Adapta la altura del chatbot al espacio disponible en la pantalla. */
+    top: 120px;
     bottom: 90px;
 
     width: 380px;
-    height: 500px;
+    max-width: calc(100vw - 60px);
 
     display: flex;
     flex-direction: column;
