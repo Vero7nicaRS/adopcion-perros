@@ -91,6 +91,12 @@ class DogViewSet(viewsets.ModelViewSet):
     queryset = Dog.objects.all().order_by('name') # Obtener la información
     serializer_class = DogSerializer 
     lookup_field = 'pk'
+    permission_classes = [IsAdminOrReadOnly] # Solo los administradores pueden crear, actualizar o eliminar perros.
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "No se permite eliminar perros."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     
 # --------------------------
