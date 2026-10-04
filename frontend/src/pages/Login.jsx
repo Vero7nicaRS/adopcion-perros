@@ -181,7 +181,14 @@ function Login() {
                                     <i className="bi bi-eye"></i>
                                 )}
                             </button>
+
+                            
                         </div>
+                        {passwordError && (
+                                    <p className="login-field-error">
+                                        {passwordError}
+                                    </p>
+                                )}
                     </div>
 
                     {submitError && (
