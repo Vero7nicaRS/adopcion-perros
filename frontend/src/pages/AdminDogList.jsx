@@ -174,15 +174,37 @@ function AdminDogList() {
         <div>
           <h1>Listado de perros </h1>
         </div>
-        <div>
-          <Link
-              to="/admin/dogs/add"
-              className="dog-admin-add-button"
-          >
-            <i className="bi bi-plus-circle"></i>
-              Añadir perro
-          </Link>
-        </div>
+        <div className="dog-admin-header-actions">
+          <div>
+            <Link
+                to="/admin/dogs/add"
+                className="dog-admin-header-button"
+            >
+              <i className="bi bi-plus-circle"></i>
+                Añadir perro
+            </Link>
+          </div>
+
+          <div>
+            <Link
+                to="/admin/temperament/add"
+                className="dog-admin-header-button"
+            >
+              <i className="bi bi-plus-circle"></i>
+                Añadir temperamento
+            </Link>
+          </div>
+
+          <div>
+            <Link
+                to="/admin/location/add"
+                className="dog-admin-header-button"
+            >
+              <i className="bi bi-plus-circle"></i>
+                Añadir ubicación
+            </Link>
+          </div>
+        </div>   
       </div>
 
       {/* FILTROS */}

@@ -12,15 +12,20 @@
     gap: 30px;
 }
 
-/* HEADER: Title + Add Button */
+/* HEADER: Title + Buttons */
 .dog-admin-header{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
 }
 
+.dog-admin-header-actions{
+    display: flex;
+    gap: 10px;
+}
 
-.dog-admin-add-button{
+.dog-admin-header-button{
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -34,7 +39,7 @@
     font-weight: 600;
 }
 
-.dog-admin-add-button:hover{
+.dog-admin-header-button:hover{
     background-color: var(--pink-colour-hover);
     color: white;
 }
@@ -42,7 +47,7 @@
 /* FILTERS*/
 
 .admin-dog-filter-container{
-    margin: 0 auto 25px;
+    margin: 20px auto 25px;
 }
 .admin-dog-filter-flex {
     display: flex;
@@ -76,6 +81,15 @@
   width: 250px;
 }
 @media (max-width: 700px) {
+    .dog-admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dog-admin-actions {
+        flex-wrap: wrap;
+    }
+
     .admin-dog-filter-flex {
         flex-direction: column;
         align-items: center;
